@@ -46,7 +46,7 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
 
     .at when <name>
 
-    .list list [<term>]
+    .at list [<term>]
 
     .at disable <name>
 
