@@ -1,12 +1,10 @@
 Hubot At Events Plugin
 =================================
 
-[![Version](https://img.shields.io/npm/v/hubot-cron-events.svg)](https://www.npmjs.com/package/hubot-cron-events)
-[![Downloads](https://img.shields.io/npm/dt/hubot-cron-events.svg)](https://www.npmjs.com/package/hubot-cron-events)
-[![Build Status](https://img.shields.io/travis/Gandi/hubot-cron-events.svg)](https://travis-ci.org/Gandi/hubot-cron-events)
-[![Dependency Status](https://gemnasium.com/Gandi/hubot-cron-events.svg)](https://gemnasium.com/Gandi/hubot-cron-events)
-[![Coverage Status](https://img.shields.io/codeclimate/coverage/github/Gandi/hubot-cron-events.svg)](https://codeclimate.com/github/Gandi/hubot-cron-events/coverage)
-[![Code Climate](https://img.shields.io/codeclimate/github/Gandi/hubot-cron-events.svg)](https://codeclimate.com/github/Gandi/hubot-cron-events)
+[![Build Status](https://img.shields.io/travis/Gandi/hubot-at-events.svg)](https://travis-ci.org/Gandi/hubot-at-events)
+[![Dependency Status](https://gemnasium.com/Gandi/hubot-at-events.svg)](https://gemnasium.com/Gandi/hubot-at-events)
+[![Coverage Status](https://img.shields.io/codeclimate/coverage/github/Gandi/hubot-at-events.svg)](https://codeclimate.com/github/Gandi/hubot-at-events/coverage)
+[![Code Climate](https://img.shields.io/codeclimate/github/Gandi/hubot-at-events.svg)](https://codeclimate.com/github/Gandi/hubot-at-events)
 
 This plugin is the brother of [hubot-cron-events](https://github.com/Gandi/hubot-cron-events) but specialised in one-time events triggered at a given time.
 
