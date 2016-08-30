@@ -5,6 +5,7 @@
 #   mose
 
 CronJob = require('cron').CronJob
+moment = require 'moment'
 
 class AtEvents
 
@@ -14,18 +15,18 @@ class AtEvents
       @robot.logger.debug 'CronEvents Data Loaded: ' + JSON.stringify(@data, null, 2)
     @robot.brain.on 'loaded', storageLoaded
     storageLoaded() # just in case storage was loaded before we got here
-    @ats = { }
+    @moments = { }
     @loadAll()
 
   loadAll: ->
     for name, at of @data
       if at.started
-        @ats[name] = @loadAt at
-        @ats[name].start()
+        @moments[name] = @loadAt at
+        @moments[name].start()
 
   loadAt: (at) ->
     params = {
-      cronTime: at.cronTime
+      cronTime: moment(at.cronTime).toDate()
       start: true
       onTick: =>
         if at.eventName?
@@ -50,7 +51,7 @@ class AtEvents
         if args isnt { }
           for k, v of args
             @data[name].eventData[k] = v
-        if @ats[name]?
+        if @moments[name]?
           @_stop name
           @_start name
         cb { message: "The job #{name} updated." }
@@ -68,7 +69,7 @@ class AtEvents
 
   enableAt: (name, cb) ->
     if @data[name]?
-      if @ats[name]?
+      if @moments[name]?
         @_stop name
       @_start name
       cb { message: "The job #{name} is now in service." }
@@ -84,7 +85,7 @@ class AtEvents
 
   statusAt: (name, cb) ->
     if @data[name]?
-      if @ats[name]?
+      if @moments[name]?
         cb { message: "The job #{name} is currently running." }
       else
         cb { message: "The job #{name} is paused." }
@@ -94,9 +95,9 @@ class AtEvents
   deleteAt: (name, cb) ->
     if @data[name]?
       delete @data[name]
-      if @ats[name]?
-        @ats[name].stop()
-        delete @ats[name]
+      if @moments[name]?
+        @moments[name].stop()
+        delete @moments[name]
       cb { message: "The job #{name} is deleted." }
     else
       cb { message: "deleteJob: There is no such job named #{name}" }
@@ -111,7 +112,7 @@ class AtEvents
   addData: (name, key, value, cb) ->
     if @data[name]?
       @data[name].eventData[key] = value
-      if @ats[name]?
+      if @moments[name]?
         @_stop name
         @_start name
       cb { message: "The key #{key} is now defined for job #{name}." }
@@ -122,7 +123,7 @@ class AtEvents
     if @data[name]?
       if @data[name].eventData[key]?
         delete @data[name].eventData[key]
-      if @ats[name]?
+      if @moments[name]?
         @_stop name
         @_start name
       cb { message: "The key #{key} is now removed from job #{name}." }
@@ -130,22 +131,28 @@ class AtEvents
       cb { message: "dropData: There is no such job named #{name}" }
 
   _start: (name) ->
-    @ats[name] = @loadJAt @data[name]
-    @ats[name].start()
+    @moments[name] = @loadJAt @data[name]
+    @moments[name].start()
     @data[name].started = true
 
   _stop: (name) ->
-    if @ats[name]?
-      @ats[name].stop()
-      delete @ats[name]
+    if @moments[name]?
+      @moments[name].stop()
+      delete @moments[name]
     @data[name].started = false
 
-  _valid: (period, tz) ->
-    try
-      new CronJob period, null, null, false, tz
-      return true
-    catch e
-      @robot.logger.error e
+  _valid: (date, tz) ->
+    m = moment(date)
+    console.log m
+    if m.isValid()
+      try
+        new CronJob m.toDate(), null, null, false, tz
+        return true
+      catch e
+        @robot.logger.error e
+        return false
+    else
+      @robot.logger.error "Invalid date #{date}"
       return false
 
   _extractKeys: (str) ->

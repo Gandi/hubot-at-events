@@ -13,7 +13,7 @@ path       = require 'path'
 module.exports = (robot) ->
 
   at = new AtEvents robot
-  robot.cron = cron
+  robot.at = at
 
   withPermission = (res, cb) ->
     user = robot.brain.userForName res.envelope.user.name
@@ -24,12 +24,12 @@ module.exports = (robot) ->
       cb()
 
   #   hubot at version
-  robot.respond /cron version$/, (res) ->
+  robot.respond /at version$/, (res) ->
     pkg = require path.join __dirname, '..', 'package.json'
-    res.send "hubot-cron-events module is version #{pkg.version}"
+    res.send "hubot-at-events module is version #{pkg.version}"
     res.finish()
 
-  #   hubot cron <name> at <date> <event> [<tz>]
+  #   hubot at <date> <event> [<tz>]
   robot.respond new RegExp(
     'at (.+) run (.*)' +
     '(?: in ([^ ]+))?' +
@@ -37,13 +37,13 @@ module.exports = (robot) ->
     '(?: with ([-_a-zA-Z0-9]+=.+)+)? *$'
     ), (res) ->
       withPermission res, ->
-        name = res.match[1]
-        at = res.match[2]
+        at = res.match[1]
+        name = res.match[2]
         tz = res.match[3]
         eventName = res.match[4]
-        args = cron._extractKeys res.match[5]
+        args = at._extractKeys res.match[5]
         options = res.match[5]
-        cron.addJob name, period, eventName, tz, options, (so) ->
+        at.addJob name, at, eventName, tz, options, (so) ->
           res.send so.message
         res.finish()
 

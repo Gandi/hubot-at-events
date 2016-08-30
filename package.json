@@ -20,7 +20,8 @@
     "url": "https://github.com/Gandi/hubot-cron-events/issues"
   },
   "dependencies": {
-    "cron": "^1.1.0"
+    "cron": "^1.1.0",
+    "moment": ">= 2.14.1"
   },
   "peerDependencies": {
     "hubot": "2.x",

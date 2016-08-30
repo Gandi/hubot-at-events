@@ -53,17 +53,17 @@ describe 'cron_events module', ->
         }
       }
       room.robot.brain.emit 'loaded'
-      room.robot.cron.loadAll()
+      room.robot.at.loadAll()
 
     afterEach ->
-      room.robot.brain.data.cron = { }
-      room.robot.cron.jobs = { }
+      room.robot.brain.data.at = { }
+      room.robot.at.moments = { }
 
     context 'when brain is loaded', ->
       it 'jobs stored as not started are not started', ->
-        expect(room.robot.at.ats.somejob).not.to.be.defined
+        expect(room.robot.at.moments.somejob).not.to.be.defined
       it 'jobs stored as started are started', ->
-        expect(room.robot.at.ats.other).to.be.defined
+        expect(room.robot.at.moments.other).to.be.defined
       it 'job in brain should have a tz recorded', ->
         expect(room.robot.brain.data.at.other.tz).to.eql 'UTC'
 
@@ -71,9 +71,9 @@ describe 'cron_events module', ->
   # ---------------------------------------------------------------------------------
   context 'user wants to know hubot-cron-events version', ->
 
-    context 'cron version', ->
-      hubot 'cron version'
+    context 'at version', ->
+      hubot 'at version'
       it 'should reply version number', ->
         expect(hubotResponse()).
-          to.match /hubot-cron-events module is version [0-9]+\.[0-9]+\.[0-9]+/
+          to.match /hubot-at-events module is version [0-9]+\.[0-9]+\.[0-9]+/
         expect(hubotResponseCount()).to.eql 1
