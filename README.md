@@ -31,7 +31,7 @@ It's also advised to use a brain persistence plugin, whatever it is, to persist 
 Commands
 --------------
 
-**Note: until version 1.0.0, thos readme is a roadmap, not a real documentation. This is a Readme-driven deve3lopment approach.**
+**Note: until version 1.0.0, thos readme is a roadmap, not a real documentation. This is a Readme-driven development approach.**
 
 Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as hubot prefix, just replace it with your prefix if it is different.
 
