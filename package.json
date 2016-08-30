@@ -1,0 +1,52 @@
+{
+  "name": "hubot-at-events",
+  "description": "A hubot plugin to perform events emission at given time.",
+  "version": "0.1.0",
+  "author": {
+    "name": "mose",
+    "email": "mose@gandi.net",
+    "url": "https://github.com/mose"
+  },
+  "license": "MIT",
+  "keywords": [
+    "hubot",
+    "hubot-scripts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Gandi/hubot-cron-events.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Gandi/hubot-cron-events/issues"
+  },
+  "dependencies": {
+    "cron": "^1.1.0"
+  },
+  "peerDependencies": {
+    "hubot": "2.x",
+    "coffee-script": "~1.6"
+  },
+  "devDependencies": {
+    "chai": "^2.1.1",
+    "codeclimate-test-reporter": "^0.3.3",
+    "coffee-coverage": "^1.0.1",
+    "coffee-script": "~1.6",
+    "coffeelint": "^1.15.7",
+    "coveralls": "^2.11.12",
+    "es6-promise": "^3.2.1",
+    "hubot": "2.x",
+    "hubot-auth": "^2.0.0",
+    "hubot-test-helper": "1.4.4",
+    "istanbul": "^0.4.4",
+    "mocha": "^2.4.5",
+    "sinon": "^1.4.2",
+    "sinon-chai": "^2.8.0",
+    "source-map-support": "^0.4.2",
+    "supertest": "^1.2.0"
+  },
+  "scripts": {
+    "test": "make test",
+    "posttest": "coffeelint lib/* scripts/* test/* index.coffee"
+  },
+  "main": "index.js"
+}
