@@ -156,55 +156,62 @@ describe 'at_events module', ->
         expect(room.robot.brain.data.at.somejob.eventData.param2).to.eql 'another'
 
 
-    # context 'and job already runs', ->
-    #   beforeEach ->
-    #     room.robot.brain.data.cron = {
-    #       somejob: {
-    #         cronTime: '0 0 1 1 *',
-    #         eventName: 'event2',
-    #         eventData: {
-    #           someparam: 'somevalue'
-    #         },
-    #         started: true
-    #       }
-    #     }
-    #     room.robot.brain.emit 'loaded'
-    #     room.robot.cron.loadAll()
+    context 'and action already runs', ->
+      beforeEach ->
+        room.robot.brain.data.at = {
+          somejob: {
+            cronTime: '2016-08-25 08:00',
+            eventName: 'event2',
+            eventData: {
+              someparam: 'somevalue'
+            },
+            started: true
+          }
+        }
+        room.robot.brain.emit 'loaded'
+        room.robot.at.loadAll()
 
-    #   afterEach ->
-    #     room.robot.brain.data.cron = { }
-    #     room.robot.cron.jobs = { }
+      afterEach ->
+        room.robot.brain.data.at = { }
+        room.robot.at.actions = { }
 
-    #   context 'with simple cronTime update', ->
-    #     hubot 'cron somejob 0 0 1 * * some.event'
-    #     it 'should change the job', ->
-    #       expect(hubotResponse()).to.eql 'The job somejob updated.'
-    #     it 'should have still have the job in the jobs queue', ->
-    #       expect(room.robot.cron.jobs.somejob).to.be.defined
-    #     it 'change the crontime', ->
-    #       expect(room.robot.brain.data.cron.somejob.cronTime).to.eql '0 0 1 * *'
-    #     it 'change the event name', ->
-    #       expect(room.robot.brain.data.cron.somejob.eventName).to.eql 'some.event'
+      context 'with simple date update', ->
+        hubot 'at 2016-08-25 20:00 run somejob'
+        it 'should change the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is updated.'
+        it 'should have still have the job in the actions queue', ->
+          expect(room.robot.at.actions.somejob).to.be.defined
+        it 'change the crontime', ->
+          expect(room.robot.brain.data.at.somejob.cronTime).to.eql '2016-08-25 20:00'
+        it 'change the event name', ->
+          expect(room.robot.brain.data.at.somejob.eventName).to.eql 'event2'
 
-    #   context 'with tz update', ->
-    #     hubot 'cron somejob 0 0 1 1 * some.event UTC'
-    #     it 'should change the job', ->
-    #       expect(hubotResponse()).to.eql 'The job somejob updated.'
-    #     it 'records timezone properly', ->
-    #       expect(room.robot.brain.data.cron.somejob.tz).to.eql 'UTC'
+      context 'with tz update', ->
+        hubot 'at 2016-08-25 20:00 in CEST run somejob'
+        it 'should change the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is updated.'
+        it 'records timezone properly', ->
+          expect(room.robot.brain.data.at.somejob.tz).to.eql 'CEST'
 
-    #   context 'with data addition', ->
-    #     hubot 'cron somejob 0 0 1 1 * some.event with param1=value1'
-    #     it 'should change the job', ->
-    #       expect(hubotResponse()).to.eql 'The job somejob updated.'
-    #     it 'keeps existing param', ->
-    #       expect(room.robot.brain.data.cron.somejob.eventData.someparam).to.eql 'somevalue'
-    #     it 'adds the new param', ->
-    #       expect(room.robot.brain.data.cron.somejob.eventData.param1).to.eql 'value1'
+      context 'with eventname update', ->
+        hubot 'at 2016-08-25 20:00 run somejob do event3'
+        it 'should change the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is updated.'
+        it 'change the event name', ->
+          expect(room.robot.brain.data.at.somejob.eventName).to.eql 'event3'
 
-    #   context 'with data update', ->
-    #     hubot 'cron somejob 0 0 1 1 * some.event with someparam=value1'
-    #     it 'should change the job', ->
-    #       expect(hubotResponse()).to.eql 'The job somejob updated.'
-    #     it 'updates existing param', ->
-    #       expect(room.robot.brain.data.cron.somejob.eventData.someparam).to.eql 'value1'
+      context 'with data addition', ->
+        hubot 'at 2016-08-25 08:00 run somejob with param1=value1'
+        it 'should change the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is updated.'
+        it 'keeps existing param', ->
+          expect(room.robot.brain.data.at.somejob.eventData.someparam).to.eql 'somevalue'
+        it 'adds the new param', ->
+          expect(room.robot.brain.data.at.somejob.eventData.param1).to.eql 'value1'
+
+      context 'with data update', ->
+        hubot 'at 2016-08-25 08:00 run somejob with someparam=value1'
+        it 'should change the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is updated.'
+        it 'updates existing param', ->
+          expect(room.robot.brain.data.at.somejob.eventData.someparam).to.eql 'value1'

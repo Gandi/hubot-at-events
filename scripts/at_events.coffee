@@ -38,10 +38,11 @@ module.exports = (robot) ->
     'at ([-0-9TZW:\.\+ ]+)' +
     '(?: in ([^ ]+))?' +
     '(?: run ([-_a-zA-Z0-9\.]+))?' +
-    ' do ([-_a-zA-Z0-9\.]+)' +
+    '(?: do ([-_a-zA-Z0-9\.]+))?' +
     '(?: with ([-_a-zA-Z0-9]+=.+)+)? *$'
     ), (res) ->
       withPermission res, ->
+        # console.log res.match
         date = res.match[1]
         tz = res.match[2]
         name = res.match[3]

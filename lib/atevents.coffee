@@ -41,7 +41,7 @@ class AtEvents
   addAt: (name, date, eventName, tz, options, cb) ->
     if @_valid date
       args = @_extractKeys(options)
-      if @data[name]?
+      if name? and @data[name]?
         @data[name].cronTime = date
         if eventName?
           @data[name].eventName = eventName
@@ -53,7 +53,7 @@ class AtEvents
         if @actions[name]?
           @_stop name
           @_start name
-        cb { message: "The action #{name} updated." }
+        cb { message: "The action #{name} is updated." }
       else
         unless name?
           name = @_random_name()
