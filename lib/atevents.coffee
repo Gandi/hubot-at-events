@@ -15,14 +15,14 @@ class AtEvents
       @robot.logger.debug 'AtEvents Data Loaded: ' + JSON.stringify(@data, null, 2)
     @robot.brain.on 'loaded', storageLoaded
     storageLoaded() # just in case storage was loaded before we got here
-    @moments = { }
+    @actions = { }
     @loadAll()
 
   loadAll: ->
     for name, at of @data
       if at.started
-        @moments[name] = @loadAt name, at
-        @moments[name].start()
+        @actions[name] = @loadAt name, at
+        @actions[name].start()
 
   loadAt: (name, at) ->
     params = {
@@ -32,7 +32,7 @@ class AtEvents
         if at.eventName?
           @robot.emit at.eventName, at.eventData
       onComplete: =>
-        delete @moments[name]
+        delete @actions[name]
     }
     if at.tz?
       params.tz = at.tz
@@ -50,7 +50,7 @@ class AtEvents
         if args isnt { }
           for k, v of args
             @data[name].eventData[k] = v
-        if @moments[name]?
+        if @actions[name]?
           @_stop name
           @_start name
         cb { message: "The action #{name} updated." }
@@ -70,7 +70,7 @@ class AtEvents
 
   enableAt: (name, cb) ->
     if @data[name]?
-      if @moments[name]?
+      if @actions[name]?
         @_stop name
       @_start name
       cb { message: "The job #{name} is now in service." }
@@ -86,7 +86,7 @@ class AtEvents
 
   statusAt: (name, cb) ->
     if @data[name]?
-      if @moments[name]?
+      if @actions[name]?
         cb { message: "The job #{name} is currently running." }
       else
         cb { message: "The job #{name} is paused." }
@@ -96,9 +96,9 @@ class AtEvents
   deleteAt: (name, cb) ->
     if @data[name]?
       delete @data[name]
-      if @moments[name]?
-        @moments[name].stop()
-        delete @moments[name]
+      if @actions[name]?
+        @actions[name].stop()
+        delete @actions[name]
       cb { message: "The job #{name} is deleted." }
     else
       cb { message: "deleteJob: There is no such job named #{name}" }
@@ -113,7 +113,7 @@ class AtEvents
   addData: (name, key, value, cb) ->
     if @data[name]?
       @data[name].eventData[key] = value
-      if @moments[name]?
+      if @actions[name]?
         @_stop name
         @_start name
       cb { message: "The key #{key} is now defined for job #{name}." }
@@ -124,7 +124,7 @@ class AtEvents
     if @data[name]?
       if @data[name].eventData[key]?
         delete @data[name].eventData[key]
-      if @moments[name]?
+      if @actions[name]?
         @_stop name
         @_start name
       cb { message: "The key #{key} is now removed from job #{name}." }
@@ -132,14 +132,14 @@ class AtEvents
       cb { message: "dropData: There is no such job named #{name}" }
 
   _start: (name) ->
-    @moments[name] = @loadJAt @data[name]
-    @moments[name].start()
+    @actions[name] = @loadJAt @data[name]
+    @actions[name].start()
     @data[name].started = true
 
   _stop: (name) ->
-    if @moments[name]?
-      @moments[name].stop()
-      delete @moments[name]
+    if @actions[name]?
+      @actions[name].stop()
+      delete @actions[name]
     @data[name].started = false
 
   _valid: (date) ->

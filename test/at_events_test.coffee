@@ -57,13 +57,13 @@ describe 'at_events module', ->
 
     afterEach ->
       room.robot.brain.data.at = { }
-      room.robot.at.moments = { }
+      room.robot.at.actions = { }
 
     context 'when brain is loaded', ->
       it 'jobs stored as not started are not started', ->
-        expect(room.robot.at.moments.somejob).not.to.be.defined
+        expect(room.robot.at.actions.somejob).not.to.be.defined
       it 'jobs stored as started are started', ->
-        expect(room.robot.at.moments.other).to.be.defined
+        expect(room.robot.at.actions.other).to.be.defined
       it 'job in brain should have a tz recorded', ->
         expect(room.robot.brain.data.at.other.tz).to.eql 'UTC'
 
