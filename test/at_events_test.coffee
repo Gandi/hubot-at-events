@@ -81,7 +81,7 @@ describe 'at_events module', ->
   # ---------------------------------------------------------------------------------
   context 'user adds a new moment', ->
 
-    context 'with an invalid period', ->
+    context 'with an invalid date', ->
       hubot 'at 2016-09-25 08:80 do some.event'
       it 'should complain about the period syntax', ->
         expect(hubotResponse()).to.eql "Sorry, '2016-09-25 08:80' is not a valid pattern."
@@ -90,17 +90,17 @@ describe 'at_events module', ->
       it 'should log an error talking about date format', ->
         expect(room.robot.logger.error).calledWith 'Invalid date 2016-09-25 08:80'
 
-    # context 'with a valid period', ->
-    #   hubot 'cron somejob 0 0 1 1 * some.event'
-    #   it 'should not complain about the period syntax', ->
-    #     expect(hubotResponse()).
-    #       to.eql 'The job somejob is created. It will stay paused until you start it.'
-    #   it 'records the new job in the brain', ->
-    #     expect(room.robot.brain.data.cron.somejob).to.exist
-    #   it 'records crontime properly', ->
-    #     expect(room.robot.brain.data.cron.somejob.cronTime).to.eql '0 0 1 1 *'
-    #   it 'records eventname properly', ->
-    #     expect(room.robot.brain.data.cron.somejob.eventName).to.eql 'some.event'
+    context 'with a valid date', ->
+      hubot 'at 2016-09-25 08:00 run somejob do some.event'
+      it 'should not complain about the date syntax', ->
+        expect(hubotResponse()).
+          to.eql 'The action somejob is created.'
+      it 'records the new action in the brain', ->
+        expect(room.robot.brain.data.at.somejob).to.exist
+      it 'records crontime properly', ->
+        expect(room.robot.brain.data.at.somejob.cronTime).to.eql '2016-09-25 08:00'
+      it 'records eventname properly', ->
+        expect(room.robot.brain.data.at.somejob.eventName).to.eql 'some.event'
 
     # context 'with a valid period and a tz', ->
     #   hubot 'cron somejob 0 0 1 1 * some.event UTC'

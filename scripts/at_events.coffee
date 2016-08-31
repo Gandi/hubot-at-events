@@ -35,7 +35,7 @@ module.exports = (robot) ->
 
   #   hubot at <date> [run <name>] do <event> [with param1=value1]
   robot.respond new RegExp(
-    'at (.+)' +
+    'at ([-0-9TZW:\.\+ ]+)' +
     '(?: in ([^ ]+))?' +
     '(?: run ([-_a-zA-Z0-9\.]+))?' +
     ' do ([-_a-zA-Z0-9\.]+)' +

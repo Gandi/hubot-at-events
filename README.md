@@ -33,7 +33,7 @@ It's also advised to use a brain persistence plugin, whatever it is, to persist 
 Commands
 --------------
 
-**Note: until version 1.0.0, thos readme is a roadmap, not a real documentation. This is a Readme-driven development approach.**
+**Note: until version 1.0.0, this readme is a roadmap, not a real documentation. This is a Readme-driven development approach.**
 
 Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as hubot prefix, just replace it with your prefix if it is different.
 
@@ -41,9 +41,13 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
         gives the version of the hubot-at-events package loaded
 
     .at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
+
     .at <date> [in <tz>] [run <name>] say <room> <message>
-    .in <number> <seconds|minutes|hours|days|weeks|months> run <name> do <event> [with param1=value1]
-    .in <number> <seconds|minutes|hours|days|weeks|months> run <name> say <room> <message>
+
+
+    .in <number> <unit> [run <name>] do <event> [with param1=value1]
+    
+    .in <number> <unit> [run <name>] say <room> <message>
 
 
     .at when <name>

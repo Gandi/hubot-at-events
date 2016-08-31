@@ -39,7 +39,6 @@ class AtEvents
     return new CronJob(params)
 
   addAt: (name, date, eventName, tz, options, cb) ->
-    # todo
     if @_valid date, tz
       args = @_extractKeys(options)
       if @data[name]?
@@ -54,7 +53,7 @@ class AtEvents
         if @moments[name]?
           @_stop name
           @_start name
-        cb { message: "The job #{name} updated." }
+        cb { message: "The action #{name} updated." }
       else
         unless name?
           name = @_random_name()
@@ -65,7 +64,7 @@ class AtEvents
           started: true,
           tz: tz
         }
-        cb { message: "The job #{name} is created." }
+        cb { message: "The action #{name} is created." }
     else
       cb { message: "Sorry, '#{date}' is not a valid pattern." }
 
