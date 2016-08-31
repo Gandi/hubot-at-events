@@ -91,10 +91,22 @@ describe 'at_events module', ->
         expect(room.robot.logger.error).calledWith 'Invalid date 2016-09-25 08:80'
 
     context 'with a valid date', ->
+      hubot 'at 2016-09-25 08:00 do some.event'
+      it 'should not complain about the date syntax', ->
+        expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
+      it 'records the new action in the brain', ->
+        expect(Object.keys(room.robot.brain.data.at).length).to.eql 1
+      it 'records crontime properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].cronTime).to.eql '2016-09-25 08:00'
+      it 'records eventname properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].eventName).to.eql 'some.event'
+
+    context 'with a valid date and a name', ->
       hubot 'at 2016-09-25 08:00 run somejob do some.event'
       it 'should not complain about the date syntax', ->
-        expect(hubotResponse()).
-          to.eql 'The action somejob is created.'
+        expect(hubotResponse()).to.eql 'The action somejob is created.'
       it 'records the new action in the brain', ->
         expect(room.robot.brain.data.at.somejob).to.exist
       it 'records crontime properly', ->
@@ -102,13 +114,20 @@ describe 'at_events module', ->
       it 'records eventname properly', ->
         expect(room.robot.brain.data.at.somejob.eventName).to.eql 'some.event'
 
-    # context 'with a valid period and a tz', ->
-    #   hubot 'cron somejob 0 0 1 1 * some.event UTC'
-    #   it 'should not complain about the period syntax', ->
-    #     expect(hubotResponse()).
-    #       to.eql 'The job somejob is created. It will stay paused until you start it.'
-    #   it 'records timezone properly', ->
-    #     expect(room.robot.brain.data.cron.somejob.tz).to.eql 'UTC'
+    context 'with a valid date and a tz', ->
+      hubot 'at 2016-09-25 08:00 in UTC do some.event'
+      it 'should not complain about the period syntax', ->
+        expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
+      it 'records timezone properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].tz).to.eql 'UTC'
+
+    context 'with a valid date and a name and a tz', ->
+      hubot 'at 2016-09-25 08:00 in UTC run somejob do some.event'
+      it 'should not complain about the period syntax', ->
+        expect(hubotResponse()).to.eql 'The action somejob is created.'
+      it 'records timezone properly', ->
+        expect(room.robot.brain.data.at.somejob.tz).to.eql 'UTC'
 
     # context 'with a valid period and some data', ->
     #   hubot 'cron somejob 0 0 1 1 * some.event UTC with param1=something'
