@@ -215,3 +215,42 @@ describe 'at_events module', ->
           expect(hubotResponse()).to.eql 'The action somejob is updated.'
         it 'updates existing param', ->
           expect(room.robot.brain.data.at.somejob.eventData.someparam).to.eql 'value1'
+
+
+  # ---------------------------------------------------------------------------------
+  context 'events listeners', ->
+    it 'should know about at.message', ->
+      expect(room.robot.events['at.message']).to.be.defined
+
+    context 'for at.message', ->
+      beforeEach (done) ->
+        room.robot.emit 'at.message', { room: 'room1', message: 'ha' }
+        setTimeout (done), 50
+
+      it 'should say that param is added to data', ->
+        expect(hubotResponse(0)).to.eql 'ha'
+
+  # ---------------------------------------------------------------------------------
+  context 'events triggers', ->
+    beforeEach ->
+      room.robot.brain.data.at = {
+        somejob: {
+          cronTime: '2016-08-25 20:00',
+          eventName: 'at.message',
+          eventData: { room: 'room1', message: 'ha' },
+          started: true,
+          tz: undefined
+        }
+      }
+      room.robot.brain.emit 'loaded'
+      room.robot.at.loadAll()
+
+    afterEach ->
+      room.robot.brain.data.at = { }
+      room.robot.at.actions = { }
+
+    context 'it fires a action on tick', ->
+      beforeEach ->
+        room.robot.at.actions.somejob.fireOnTick()
+      it 'should say something', ->
+        expect(hubotResponse(0)).to.eql 'ha'

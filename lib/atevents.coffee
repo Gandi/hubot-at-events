@@ -22,7 +22,6 @@ class AtEvents
     for name, at of @data
       if at.started
         @actions[name] = @loadAt name, at
-        @actions[name].start()
 
   loadAt: (name, at) ->
     params = {
@@ -132,14 +131,12 @@ class AtEvents
       cb { message: "dropData: There is no such job named #{name}" }
 
   _start: (name) ->
-    @actions[name] = @loadJAt @data[name]
-    @actions[name].start()
+    @actions[name] = @loadAt name, @data[name]
     @data[name].started = true
 
   _stop: (name) ->
     if @actions[name]?
       @actions[name].stop()
-      delete @actions[name]
     @data[name].started = false
 
   _valid: (date) ->
