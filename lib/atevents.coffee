@@ -12,7 +12,7 @@ class AtEvents
   constructor: (@robot) ->
     storageLoaded = =>
       @data = @robot.brain.data.at ||= { }
-      @robot.logger.debug 'CronEvents Data Loaded: ' + JSON.stringify(@data, null, 2)
+      @robot.logger.debug 'AtEvents Data Loaded: ' + JSON.stringify(@data, null, 2)
     @robot.brain.on 'loaded', storageLoaded
     storageLoaded() # just in case storage was loaded before we got here
     @moments = { }
@@ -21,10 +21,10 @@ class AtEvents
   loadAll: ->
     for name, at of @data
       if at.started
-        @moments[name] = @loadAt at
+        @moments[name] = @loadAt name, at
         @moments[name].start()
 
-  loadAt: (at) ->
+  loadAt: (name, at) ->
     params = {
       cronTime: moment(at.cronTime).toDate()
       start: true
@@ -32,7 +32,7 @@ class AtEvents
         if at.eventName?
           @robot.emit at.eventName, at.eventData
       onComplete: =>
-        # delete at entry
+        delete @moments[name]
     }
     if at.tz?
       params.tz = at.tz
@@ -56,11 +56,13 @@ class AtEvents
           @_start name
         cb { message: "The job #{name} updated." }
       else
+        unless name?
+          name = @_random_name()
         @data[name] = {
           cronTime: date,
           eventName: eventName,
           eventData: args,
-          started: false,
+          started: true,
           tz: tz
         }
         cb { message: "The job #{name} is created." }
@@ -143,7 +145,6 @@ class AtEvents
 
   _valid: (date, tz) ->
     m = moment(date)
-    console.log m
     if m.isValid()
       try
         new CronJob m.toDate(), null, null, false, tz
@@ -163,6 +164,9 @@ class AtEvents
       for i, k of keys
         args[k] = values[i]
     args
+
+  _random_name: ->
+    new Date().getTime().toString(36)
 
 
 

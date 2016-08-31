@@ -8,6 +8,8 @@ Hubot At Events Plugin
 
 This plugin is the brother of [hubot-cron-events](https://github.com/Gandi/hubot-cron-events) but specialised in one-time events triggered at a given time.
 
+*Work in progress* - this plugin is not ready for use yet.
+
 
 Installation
 --------------
@@ -38,8 +40,8 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
     .at version
         gives the version of the hubot-at-events package loaded
 
-    .at <date> run <name> do <event> [with param1=value1]
-    .at <date> run <name> say <room> <message>
+    .at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
+    .at <date> [in <tz>] [run <name>] say <room> <message>
     .in <number> <seconds|minutes|hours|days|weeks|months> run <name> do <event> [with param1=value1]
     .in <number> <seconds|minutes|hours|days|weeks|months> run <name> say <room> <message>
 

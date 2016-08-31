@@ -3,6 +3,10 @@
 #
 # Commands:
 #   hubot at version
+#   hubot at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
+#   hubot at <date> [in <tz>] [run <name>] say <room> <message>
+#   hubot in <number> <unit> [run <name>] do <event> [with param1=value1]
+#   hubot in <number> <unit> [run <name>] say <room> <message>
 #
 # Author:
 #   mose
@@ -29,21 +33,21 @@ module.exports = (robot) ->
     res.send "hubot-at-events module is version #{pkg.version}"
     res.finish()
 
-  #   hubot at <date> <event> [<tz>]
+  #   hubot at <date> [run <name>] do <event> [with param1=value1]
   robot.respond new RegExp(
-    'at (.+) run (.*)' +
+    'at (.+)' +
     '(?: in ([^ ]+))?' +
-    '(?: is ([-_a-zA-Z0-9\.]+))?' +
+    '(?: run ([-_a-zA-Z0-9\.]+))?' +
+    ' do ([-_a-zA-Z0-9\.]+)' +
     '(?: with ([-_a-zA-Z0-9]+=.+)+)? *$'
     ), (res) ->
       withPermission res, ->
-        at = res.match[1]
-        name = res.match[2]
-        tz = res.match[3]
+        date = res.match[1]
+        tz = res.match[2]
+        name = res.match[3]
         eventName = res.match[4]
-        args = at._extractKeys res.match[5]
         options = res.match[5]
-        at.addJob name, at, eventName, tz, options, (so) ->
+        at.addAt name, date, eventName, tz, options, (so) ->
           res.send so.message
         res.finish()
 
