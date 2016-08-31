@@ -39,7 +39,7 @@ class AtEvents
     return new CronJob(params)
 
   addAt: (name, date, eventName, tz, options, cb) ->
-    if @_valid date, tz
+    if @_valid date
       args = @_extractKeys(options)
       if @data[name]?
         @data[name].cronTime = date
@@ -142,15 +142,10 @@ class AtEvents
       delete @moments[name]
     @data[name].started = false
 
-  _valid: (date, tz) ->
+  _valid: (date) ->
     m = moment(date)
     if m.isValid()
-      try
-        new CronJob m.toDate(), null, null, false, tz
-        return true
-      catch e
-        @robot.logger.error e
-        return false
+      return true
     else
       @robot.logger.error "Invalid date #{date}"
       return false

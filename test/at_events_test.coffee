@@ -129,35 +129,31 @@ describe 'at_events module', ->
       it 'records timezone properly', ->
         expect(room.robot.brain.data.at.somejob.tz).to.eql 'UTC'
 
-    # context 'with a valid period and some data', ->
-    #   hubot 'cron somejob 0 0 1 1 * some.event UTC with param1=something'
-    #   it 'should not complain about the period syntax', ->
-    #     expect(hubotResponse()).
-    #       to.eql 'The job somejob is created. It will stay paused until you start it.'
-    #   it 'records first param properly', ->
-    #     expect(room.robot.brain.data.cron.somejob.eventData.param1).to.eql 'something'
+    context 'with a valid date and some data', ->
+      hubot 'at 2016-09-25 run somejob do some.event with param1=something'
+      it 'should not complain about the period syntax', ->
+        expect(hubotResponse()).to.eql 'The action somejob is created.'
+      it 'records first param properly', ->
+        expect(room.robot.brain.data.at.somejob.eventData.param1).to.eql 'something'
 
-    # context 'with a valid period and some data', ->
-    #   hubot 'cron somejob 0 0 1 1 * some.event UTC with param1=something param2=another'
-    #   it 'should not complain about the period syntax', ->
-    #     expect(hubotResponse()).
-    #       to.eql 'The job somejob is created. It will stay paused until you start it.'
-    #   it 'records first param properly', ->
-    #     expect(room.robot.brain.data.cron.somejob.eventData.param1).to.eql 'something'
-    #   it 'records second param properly', ->
-    #     expect(room.robot.brain.data.cron.somejob.eventData.param2).to.eql 'another'
+    context 'with a valid date and some multiple data', ->
+      hubot 'at 2016-09-25 run somejob do some.event with param1=something param2=another'
+      it 'should not complain about the period syntax', ->
+        expect(hubotResponse()).to.eql 'The action somejob is created.'
+      it 'records first param properly', ->
+        expect(room.robot.brain.data.at.somejob.eventData.param1).to.eql 'something'
+      it 'records second param properly', ->
+        expect(room.robot.brain.data.at.somejob.eventData.param2).to.eql 'another'
 
-    # context 'with a valid period and some data with spaces', ->
-    #   hubot 'cron somejob 0 0 1 1 * some.event UTC ' +
-    #         'with param1=something and whatever param2=another'
-    #   it 'should not complain about the period syntax', ->
-    #     expect(hubotResponse()).
-    #       to.eql 'The job somejob is created. It will stay paused until you start it.'
-    #   it 'records first param properly', ->
-    #     expect(room.robot.brain.data.cron.somejob.eventData.param1).
-    #       to.eql 'something and whatever'
-    #   it 'records second param properly', ->
-    #     expect(room.robot.brain.data.cron.somejob.eventData.param2).to.eql 'another'
+    context 'with a valid date and some data with spaces', ->
+      hubot 'at 2016-09-25 run somejob do some.event ' +
+            'with param1=something and whatever param2=another'
+      it 'should not complain about the period syntax', ->
+        expect(hubotResponse()).to.eql 'The action somejob is created.'
+      it 'records first param properly', ->
+        expect(room.robot.brain.data.at.somejob.eventData.param1).to.eql 'something and whatever'
+      it 'records second param properly', ->
+        expect(room.robot.brain.data.at.somejob.eventData.param2).to.eql 'another'
 
 
     # context 'and job already runs', ->
