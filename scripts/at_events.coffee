@@ -9,6 +9,8 @@
 #   hubot in <number> <unit> [run <name>] say <room> <message>
 #   hubot at enable <name>
 #   hubot at disable <name>
+#   hubot at list <name>
+#   hubot at cancel <name>
 #
 # Author:
 #   mose
@@ -91,7 +93,7 @@ module.exports = (robot) ->
           if filter?
             res.send "The is no action matching #{filter}."
           else
-            res.send 'The is no action defined.'
+            res.send 'There is no action defined.'
         else
           for k, v of so
             status = if v.started
@@ -108,7 +110,6 @@ module.exports = (robot) ->
                 eventdata += "#{datakey}=#{datavalue} "
             res.send "at #{v.cronTime}#{tz} run #{k} do #{v.eventName} #{eventdata}#{status}"
       res.finish()
-
 
   #   hubot at cancel <name>
   robot.respond /at cancel ([^ ]+)$/, (res) ->

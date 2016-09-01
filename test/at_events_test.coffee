@@ -418,6 +418,20 @@ describe 'at_events module', ->
         expect(hubotResponse(3)).to.eql 'at 2042-08-25 08:00 in UTC run anotherjob do event1 '
         expect(hubotResponse(4)).to.be.undefined
 
+  context 'user lists actions but there is no action defined', ->
+    beforeEach ->
+      room.robot.brain.data.at = { }
+      room.robot.brain.emit 'loaded'
+      room.robot.at.loadAll()
+
+    afterEach ->
+      room.robot.brain.data.at = { }
+      room.robot.at.actions = { }
+
+    hubot 'at list'
+    it 'should warn that there are no action', ->
+      expect(hubotResponse()).to.eql 'There is no action defined.'
+
   # ---------------------------------------------------------------------------------
   context 'user deletes an action', ->
     beforeEach ->

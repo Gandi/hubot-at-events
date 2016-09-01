@@ -35,7 +35,7 @@ Commands
 
 **Note: until version 1.0.0, this readme is a roadmap, not a real documentation. This is a Readme-driven development approach.**
 
-Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as hubot prefix, just replace it with your prefix if it is different.
+Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as hubot prefix, just replace it with your prefix if it is different. Uncommented commands are just not yet implemented.
 
     .at version
         gives the version of the hubot-at-events package loaded
@@ -70,6 +70,7 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
         if no <term> is provided, it will just list all actions
 
     .at cancel <name>
+        removes the action, all data about it will be lost
 
     .at when <name>
 
