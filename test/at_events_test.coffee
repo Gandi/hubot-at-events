@@ -284,7 +284,7 @@ describe 'at_events module', ->
     context 'but action is not known', ->
       hubot 'at enable nojob'
       it 'should complain about the nonexistence of that action', ->
-        expect(hubotResponse()).to.eql 'There is no such action named nojob'
+        expect(hubotResponse()).to.eql 'There is no such action named nojob.'
       it 'should not have added an action in the actions queue', ->
         expect(room.robot.at.actions.nojob).not.to.be.defined
 
@@ -333,7 +333,7 @@ describe 'at_events module', ->
     context 'but action is not known', ->
       hubot 'at disable nojob'
       it 'should complain about the nonexistence of that job', ->
-        expect(hubotResponse()).to.eql 'There is no such action named nojob'
+        expect(hubotResponse()).to.eql 'There is no such action named nojob.'
       it 'should not have added a job in the jobs queue', ->
         expect(room.robot.at.actions.somejob).not.to.be.defined
 
@@ -393,7 +393,7 @@ describe 'at_events module', ->
     context 'but there is no match', ->
       hubot 'at list nojob'
       it 'should warn that there are no matches', ->
-        expect(hubotResponse()).to.eql 'The is no action matching nojob.'
+        expect(hubotResponse()).to.eql 'There is no action matching nojob.'
 
     context 'and there is one match', ->
       hubot 'at list somejob'
@@ -454,7 +454,7 @@ describe 'at_events module', ->
     context 'but action is not known', ->
       hubot 'at cancel nojob'
       it 'should complain about the nonexistence of that action', ->
-        expect(hubotResponse()).to.eql 'There is no such action named nojob'
+        expect(hubotResponse()).to.eql 'There is no such action named nojob.'
 
     context 'and action exists', ->
       hubot 'at cancel somejob'

@@ -91,7 +91,7 @@ module.exports = (robot) ->
       at.listActions filter, (so) ->
         if Object.keys(so).length is 0
           if filter?
-            res.send "The is no action matching #{filter}."
+            res.send "There is no action matching #{filter}."
           else
             res.send 'There is no action defined.'
         else

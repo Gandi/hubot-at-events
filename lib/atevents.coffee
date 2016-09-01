@@ -68,24 +68,20 @@ class AtEvents
       cb { message: "Sorry, '#{date}' is not a valid pattern." }
 
   enableAction: (name, cb) ->
-    if @data[name]?
+    @withAction name, cb, =>
       if @actions[name]?
         cb { message: "The action #{name} is already scheduled." }
       else
         @_start name
         cb { message: "The action #{name} is now scheduled." }
-    else
-      cb { message: "There is no such action named #{name}" }
 
   disableAction: (name, cb) ->
-    if @data[name]?
+    @withAction name, cb, =>
       if @actions[name]?
         @_stop name
         cb { message: "The action #{name} is now unscheduled." }
       else
         cb { message: "The action #{name} is actually not scheduled." }
-    else
-      cb { message: "There is no such action named #{name}" }
 
   listActions: (filter, cb) ->
     res = { }
@@ -95,34 +91,35 @@ class AtEvents
     cb res
 
   deleteAction: (name, cb) ->
-    if @data[name]?
+    @withAction name, cb, =>
       if @actions[name]?
         @actions[name].stop()
       delete @data[name]
       cb { message: "The action #{name} is cancelled." }
-    else
-      cb { message: "There is no such action named #{name}" }
 
   addData: (name, key, value, cb) ->
-    if @data[name]?
+    @withAction name, cb, =>
       @data[name].eventData[key] = value
       if @actions[name]?
         @_stop name
         @_start name
       cb { message: "The key #{key} is now defined for job #{name}." }
-    else
-      cb { message: "addData: There is no such job named #{name}" }
 
   dropData: (name, key, cb) ->
-    if @data[name]?
+    @withAction name, cb, =>
       if @data[name].eventData[key]?
         delete @data[name].eventData[key]
       if @actions[name]?
         @_stop name
         @_start name
       cb { message: "The key #{key} is now removed from job #{name}." }
+
+  withAction: (name, cb, docb) ->
+    if @data[name]?
+      docb()
     else
-      cb { message: "dropData: There is no such job named #{name}" }
+      cb { message: "There is no such action named #{name}." }
+
 
   _start: (name) ->
     @actions[name] = @loadAction name, @data[name]
