@@ -41,14 +41,23 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
         gives the version of the hubot-at-events package loaded
 
     .at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
+        schedules triggering of <event> at given <date>
+        - <date> has to be in the future
+        - params can be provided to be transmitted to the <event>
+        - if you don't provide a <name> for the action (using 'run <name>')
+          then a random name will be attributed to it,
+          as it's needed for later cancellation or modification
+        - if no <tz> is provided, the server tz will be applied
 
-    .at <date> [in <tz>] [run <name>] say <room> <message>
-
+    .at <date> [in <tz>] [run <name>] say [in <room>] <message>
+        same as above, except that the aevent will be 'at.message'
+        - if the <room> is omitted, it will be set to the room 
+          where the command is done
+        - the action will be given a random name.
 
     .in <number> <unit> [run <name>] do <event> [with param1=value1]
     
     .in <number> <unit> [run <name>] say <room> <message>
-
 
     .at when <name>
 

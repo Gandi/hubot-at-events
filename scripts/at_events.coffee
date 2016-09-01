@@ -4,7 +4,7 @@
 # Commands:
 #   hubot at version
 #   hubot at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
-#   hubot at <date> [in <tz>] [run <name>] say <room> <message>
+#   hubot at <date> [in <tz>] [run <name>] say [in <room>] <message>
 #   hubot in <number> <unit> [run <name>] do <event> [with param1=value1]
 #   hubot in <number> <unit> [run <name>] say <room> <message>
 #
@@ -33,7 +33,7 @@ module.exports = (robot) ->
     res.send "hubot-at-events module is version #{pkg.version}"
     res.finish()
 
-  #   hubot at <date> [run <name>] do <event> [with param1=value1]
+  #   hubot at <date> [in <tz>] say [in <room>] <some message>
   robot.respond new RegExp(
     'at ([-0-9TZW:\.\+ ]+)' +
     '(?: in ([^ ]+))?' +
@@ -49,7 +49,7 @@ module.exports = (robot) ->
           res.send so.message
         res.finish()
 
-  #   hubot at <date> [run <name>] do <event> [with param1=value1]
+  #   hubot at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
   robot.respond new RegExp(
     'at ([-0-9TZW:\.\+ ]+)' +
     '(?: in ([^ ]+))?' +
