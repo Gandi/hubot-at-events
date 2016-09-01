@@ -1,6 +1,8 @@
 Hubot At Events Plugin
 =================================
 
+[![Version](https://img.shields.io/npm/v/hubot-at-events.svg)](https://www.npmjs.com/package/hubot-at-events)
+[![Downloads](https://img.shields.io/npm/dt/hubot-at-events.svg)](https://www.npmjs.com/package/hubot-at-events)
 [![Build Status](https://img.shields.io/travis/Gandi/hubot-at-events.svg)](https://travis-ci.org/Gandi/hubot-at-events)
 [![Dependency Status](https://gemnasium.com/Gandi/hubot-at-events.svg)](https://gemnasium.com/Gandi/hubot-at-events)
 [![Coverage Status](https://img.shields.io/codeclimate/coverage/github/Gandi/hubot-at-events.svg)](https://codeclimate.com/github/Gandi/hubot-at-events/coverage)
