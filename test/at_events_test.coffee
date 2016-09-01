@@ -393,3 +393,50 @@ describe 'at_events module', ->
         room.robot.at.actions.somejob.fireOnTick()
       it 'should say something', ->
         expect(hubotResponse(0)).to.eql 'ha'
+
+  # ---------------------------------------------------------------------------------
+  context 'permissions system', ->
+    beforeEach ->
+      process.env.HUBOT_AUTH_ADMIN = 'admin_user'
+      room.robot.loadFile path.resolve('node_modules/hubot-auth/src'), 'auth.coffee'
+      room.robot.brain.userForId 'admin_user', {
+        name: 'admin_user'
+      }
+      room.robot.brain.userForId 'user', {
+        name: 'user'
+      }
+
+    context 'user wants to disable an action', ->
+      beforeEach ->
+        room.robot.brain.data.at = {
+          somejob: {
+            cronTime: '2042-08-25 20:00',
+            eventName: 'event1',
+            eventData: { },
+            started: true
+          }
+        }
+        room.robot.brain.emit 'loaded'
+        room.robot.at.loadAll()
+
+      afterEach ->
+        room.robot.brain.data.at = { }
+        room.robot.at.actions = { }
+
+      context 'and user is not admin', ->
+        hubot 'at disable somejob', 'user'
+        it 'should deny permission to the user', ->
+          expect(hubotResponse()).to.eql "@user You don't have permission to do that."
+        it 'should keep the brain with the started status', ->
+          expect(room.robot.brain.data.at.somejob.started).to.be.true
+        it 'should not have added a job in the jobs queue', ->
+          expect(room.robot.at.actions.somejob).to.be.defined
+
+      context 'and user is admin', ->
+        hubot 'at disable somejob', 'admin_user'
+        it 'should comply and disable the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is now unscheduled.'
+        it 'should change brain to record it\'s not started', ->
+          expect(room.robot.brain.data.at.somejob.started).to.be.false
+        it 'should not have added a job in the jobs queue', ->
+          expect(room.robot.at.actions.somejob).to.be.undefined
