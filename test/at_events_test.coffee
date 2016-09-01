@@ -307,7 +307,7 @@ describe 'at_events module', ->
         expect(room.robot.at.actions.another).to.be.defined
 
   # ---------------------------------------------------------------------------------
-  context 'user stops a job', ->
+  context 'user stops an action', ->
     beforeEach ->
       room.robot.brain.data.at = {
         somejob: {
@@ -355,6 +355,68 @@ describe 'at_events module', ->
       it 'should not have added a job in the jobs queue', ->
         expect(room.robot.at.actions.another).to.be.undefined
 
+  # ---------------------------------------------------------------------------------
+  context 'user lists actions', ->
+    beforeEach ->
+      room.robot.brain.data.at = {
+        somejob: {
+          cronTime: '2042-08-25 08:00',
+          eventName: 'event1',
+          eventData: { },
+          started: false,
+          tz: undefined
+        },
+        someotherjob: {
+          cronTime: '2042-08-25 08:00',
+          eventName: 'event1',
+          eventData: {
+            param1: 'value1'
+          },
+          started: true,
+          tz: undefined
+        },
+        anotherjob: {
+          cronTime: '2042-08-25 08:00',
+          eventName: 'event1',
+          eventData: { },
+          started: true,
+          tz: 'UTC'
+        }
+      }
+      room.robot.brain.emit 'loaded'
+      room.robot.at.loadAll()
+
+    afterEach ->
+      room.robot.brain.data.at = { }
+      room.robot.at.actions = { }
+
+    context 'but there is no match', ->
+      hubot 'at list nojob'
+      it 'should warn that there are no matches', ->
+        expect(hubotResponse()).to.eql 'The is no action matching nojob.'
+
+    context 'and there is one match', ->
+      hubot 'at list somejob'
+      it 'should show the matching action', ->
+        expect(hubotResponse()).to.eql 'at 2042-08-25 08:00 run somejob do event1 (disabled)'
+        expect(hubotResponse(2)).to.be.undefined
+
+    context 'and there is two matches', ->
+      hubot 'at list ome'
+      it 'should show the matching actions', ->
+        expect(hubotResponse()).to.eql 'at 2042-08-25 08:00 run somejob do event1 (disabled)'
+        expect(hubotResponse(2)).
+          to.eql 'at 2042-08-25 08:00 run someotherjob do event1 with param1=value1 '
+        expect(hubotResponse(3)).to.be.undefined
+
+    context 'and it gets all jobs', ->
+      hubot 'at list'
+      it 'should show the whole list of actions', ->
+        expect(hubotResponse()).to.eql 'at 2042-08-25 08:00 run somejob do event1 (disabled)'
+        expect(hubotResponse(2)).
+          to.eql 'at 2042-08-25 08:00 run someotherjob do event1 with param1=value1 '
+        expect(hubotResponse(3)).to.eql 'at 2042-08-25 08:00 in UTC run anotherjob do event1 '
+        expect(hubotResponse(4)).to.be.undefined
 
   # ---------------------------------------------------------------------------------
   context 'events listeners', ->

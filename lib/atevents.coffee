@@ -106,7 +106,7 @@ class AtEvents
     else
       cb { message: "deleteJob: There is no such job named #{name}" }
 
-  listAt: (filter, cb) ->
+  listActions: (filter, cb) ->
     res = { }
     for k in Object.keys(@data)
       if new RegExp(filter).test k

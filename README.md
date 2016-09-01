@@ -59,15 +59,19 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
     
     .in <number> <unit> [run <name>] say <room> <message>
 
-    .at when <name>
-
-    .at list [<term>]
+    .at enable <name>
+        activate an action that was previously disabled
 
     .at disable <name>
+        disable an action but without deleting it, so it can be re-enabled later
 
-    .at enable <name>
+    .at list [<term>]
+        will list all actions matching <term>
+        if no <term> is provided, it will just list all actions
 
     .at cancel <name>
+
+    .at when <name>
 
     .at <name> with <key> = <value>
 

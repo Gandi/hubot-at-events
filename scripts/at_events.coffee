@@ -7,6 +7,8 @@
 #   hubot at <date> [in <tz>] [run <name>] say [in <room>] <message>
 #   hubot in <number> <unit> [run <name>] do <event> [with param1=value1]
 #   hubot in <number> <unit> [run <name>] say <room> <message>
+#   hubot at enable <name>
+#   hubot at disable <name>
 #
 # Author:
 #   mose
@@ -65,7 +67,7 @@ module.exports = (robot) ->
         res.finish()
 
   #   hubot at enable <name>
-  robot.respond /at enable ([^ ]+)$/, (res) ->
+  robot.respond /at enable ([^ ]+) *$/, (res) ->
     withPermission res, ->
       name = res.match[1]
       at.enableAction name, (so) ->
@@ -73,13 +75,39 @@ module.exports = (robot) ->
       res.finish()
 
   #   hubot at disable <name>
-  robot.respond /at disable ([^ ]+)$/, (res) ->
+  robot.respond /at disable ([^ ]+) *$/, (res) ->
     withPermission res, ->
       name = res.match[1]
       at.disableAction name, (so) ->
         res.send so.message
       res.finish()
 
+  #   hubot at list <name>
+  robot.respond /at list *([^ ]+)? *$/, (res) ->
+    withPermission res, ->
+      filter = res.match[1]
+      at.listActions filter, (so) ->
+        if Object.keys(so).length is 0
+          if filter?
+            res.send "The is no action matching #{filter}."
+          else
+            res.send 'The is no action defined.'
+        else
+          for k, v of so
+            status = if v.started
+              ''
+            else
+              '(disabled)'
+            tz = ''
+            if v.tz?
+              tz = " in #{v.tz}"
+            eventdata = ''
+            if Object.keys(v.eventData).length > 0
+              eventdata = 'with '
+              for datakey, datavalue of v.eventData
+                eventdata += "#{datakey}=#{datavalue} "
+            res.send "at #{v.cronTime}#{tz} run #{k} do #{v.eventName} #{eventdata}#{status}"
+      res.finish()
 
   # sample for testing purposes
   robot.on 'at.message', (e) ->
