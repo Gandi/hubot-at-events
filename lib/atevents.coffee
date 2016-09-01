@@ -21,9 +21,9 @@ class AtEvents
   loadAll: ->
     for name, at of @data
       if at.started
-        @actions[name] = @loadAt name, at
+        @actions[name] = @loadAction name, at
 
-  loadAt: (name, at) ->
+  loadAction: (name, at) ->
     params = {
       cronTime: moment(at.cronTime).toDate()
       start: true
@@ -37,7 +37,7 @@ class AtEvents
       params.tz = at.tz
     return new CronJob(params)
 
-  addAt: (name, date, eventName, tz, options, cb) ->
+  addAction: (name, date, eventName, tz, options, cb) ->
     if @_valid date
       args = @_extractKeys(options)
       if name? and @data[name]?
@@ -67,21 +67,25 @@ class AtEvents
     else
       cb { message: "Sorry, '#{date}' is not a valid pattern." }
 
-  enableAt: (name, cb) ->
+  enableAction: (name, cb) ->
+    if @data[name]?
+      if @actions[name]?
+        cb { message: "The action #{name} is already scheduled." }
+      else
+        @_start name
+        cb { message: "The action #{name} is now scheduled." }
+    else
+      cb { message: "There is no such action named #{name}" }
+
+  disableAction: (name, cb) ->
     if @data[name]?
       if @actions[name]?
         @_stop name
-      @_start name
-      cb { message: "The job #{name} is now in service." }
+        cb { message: "The action #{name} is now unscheduled." }
+      else
+        cb { message: "The action #{name} is actually not scheduled." }
     else
-      cb { message: "startJob: There is no such job named #{name}" }
-
-  disableAt: (name, cb) ->
-    if @data[name]?
-      @_stop name
-      cb { message: "The job #{name} is now paused." }
-    else
-      cb { message: "stopJob: There is no such job named #{name}" }
+      cb { message: "There is no such action named #{name}" }
 
   statusAt: (name, cb) ->
     if @data[name]?
@@ -131,7 +135,7 @@ class AtEvents
       cb { message: "dropData: There is no such job named #{name}" }
 
   _start: (name) ->
-    @actions[name] = @loadAt name, @data[name]
+    @actions[name] = @loadAction name, @data[name]
     @data[name].started = true
 
   _stop: (name) ->

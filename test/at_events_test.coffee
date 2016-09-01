@@ -39,13 +39,13 @@ describe 'at_events module', ->
     beforeEach ->
       room.robot.brain.data.at = {
         somejob: {
-          cronTime: '2016-08-25 08:00',
+          cronTime: '2042-08-25 08:00',
           eventName: 'event1',
           eventData: { },
           started: false
         },
         other: {
-          cronTime: '2016-08-25 08:00',
+          cronTime: '2042-08-25 08:00',
           eventName: 'event2',
           eventData: { },
           started: true,
@@ -81,14 +81,14 @@ describe 'at_events module', ->
   # ---------------------------------------------------------------------------------
   context 'user adds a new message action', ->
     context 'with a valid date', ->
-      hubot 'at 2016-09-25 08:00 say something to say'
+      hubot 'at 2042-09-25 08:00 say something to say'
       it 'should not complain about the date syntax', ->
         expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
       it 'records the new action in the brain', ->
         expect(Object.keys(room.robot.brain.data.at).length).to.eql 1
       it 'records crontime properly', ->
         name = Object.keys(room.robot.brain.data.at)[0]
-        expect(room.robot.brain.data.at[name].cronTime).to.eql '2016-09-25 08:00'
+        expect(room.robot.brain.data.at[name].cronTime).to.eql '2042-09-25 08:00'
       it 'records eventname properly', ->
         name = Object.keys(room.robot.brain.data.at)[0]
         expect(room.robot.brain.data.at[name].eventName).to.eql 'at.message'
@@ -100,14 +100,14 @@ describe 'at_events module', ->
         expect(room.robot.brain.data.at[name].eventData.message).to.eql 'something to say'
 
     context 'when room is specified', ->
-      hubot 'at 2016-09-25 08:00 say in #dev something to say'
+      hubot 'at 2042-09-25 08:00 say in #dev something to say'
       it 'should not complain about the date syntax', ->
         expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
       it 'records the new action in the brain', ->
         expect(Object.keys(room.robot.brain.data.at).length).to.eql 1
       it 'records crontime properly', ->
         name = Object.keys(room.robot.brain.data.at)[0]
-        expect(room.robot.brain.data.at[name].cronTime).to.eql '2016-09-25 08:00'
+        expect(room.robot.brain.data.at[name].cronTime).to.eql '2042-09-25 08:00'
       it 'records eventname properly', ->
         name = Object.keys(room.robot.brain.data.at)[0]
         expect(room.robot.brain.data.at[name].eventName).to.eql 'at.message'
@@ -123,40 +123,40 @@ describe 'at_events module', ->
   context 'user adds a new action', ->
 
     context 'with an invalid date', ->
-      hubot 'at 2016-09-25 08:80 do some.event'
+      hubot 'at 2042-09-25 08:80 do some.event'
       it 'should complain about the period syntax', ->
-        expect(hubotResponse()).to.eql "Sorry, '2016-09-25 08:80' is not a valid pattern."
+        expect(hubotResponse()).to.eql "Sorry, '2042-09-25 08:80' is not a valid pattern."
       it 'should log an error', ->
         expect(room.robot.logger.error).calledOnce
       it 'should log an error talking about date format', ->
-        expect(room.robot.logger.error).calledWith 'Invalid date 2016-09-25 08:80'
+        expect(room.robot.logger.error).calledWith 'Invalid date 2042-09-25 08:80'
 
     context 'with a valid date', ->
-      hubot 'at 2016-09-25 08:00 do some.event'
+      hubot 'at 2042-09-25 08:00 do some.event'
       it 'should not complain about the date syntax', ->
         expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
       it 'records the new action in the brain', ->
         expect(Object.keys(room.robot.brain.data.at).length).to.eql 1
       it 'records crontime properly', ->
         name = Object.keys(room.robot.brain.data.at)[0]
-        expect(room.robot.brain.data.at[name].cronTime).to.eql '2016-09-25 08:00'
+        expect(room.robot.brain.data.at[name].cronTime).to.eql '2042-09-25 08:00'
       it 'records eventname properly', ->
         name = Object.keys(room.robot.brain.data.at)[0]
         expect(room.robot.brain.data.at[name].eventName).to.eql 'some.event'
 
     context 'with a valid date and a name', ->
-      hubot 'at 2016-09-25 08:00 run somejob do some.event'
+      hubot 'at 2042-09-25 08:00 run somejob do some.event'
       it 'should not complain about the date syntax', ->
         expect(hubotResponse()).to.eql 'The action somejob is created.'
       it 'records the new action in the brain', ->
         expect(room.robot.brain.data.at.somejob).to.exist
       it 'records crontime properly', ->
-        expect(room.robot.brain.data.at.somejob.cronTime).to.eql '2016-09-25 08:00'
+        expect(room.robot.brain.data.at.somejob.cronTime).to.eql '2042-09-25 08:00'
       it 'records eventname properly', ->
         expect(room.robot.brain.data.at.somejob.eventName).to.eql 'some.event'
 
     context 'with a valid date and a tz', ->
-      hubot 'at 2016-09-25 08:00 in UTC do some.event'
+      hubot 'at 2042-09-25 08:00 in UTC do some.event'
       it 'should not complain about the period syntax', ->
         expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
       it 'records timezone properly', ->
@@ -164,21 +164,21 @@ describe 'at_events module', ->
         expect(room.robot.brain.data.at[name].tz).to.eql 'UTC'
 
     context 'with a valid date and a name and a tz', ->
-      hubot 'at 2016-09-25 08:00 in UTC run somejob do some.event'
+      hubot 'at 2042-09-25 08:00 in UTC run somejob do some.event'
       it 'should not complain about the period syntax', ->
         expect(hubotResponse()).to.eql 'The action somejob is created.'
       it 'records timezone properly', ->
         expect(room.robot.brain.data.at.somejob.tz).to.eql 'UTC'
 
     context 'with a valid date and some data', ->
-      hubot 'at 2016-09-25 run somejob do some.event with param1=something'
+      hubot 'at 2042-09-25 run somejob do some.event with param1=something'
       it 'should not complain about the period syntax', ->
         expect(hubotResponse()).to.eql 'The action somejob is created.'
       it 'records first param properly', ->
         expect(room.robot.brain.data.at.somejob.eventData.param1).to.eql 'something'
 
     context 'with a valid date and some multiple data', ->
-      hubot 'at 2016-09-25 run somejob do some.event with param1=something param2=another'
+      hubot 'at 2042-09-25 run somejob do some.event with param1=something param2=another'
       it 'should not complain about the period syntax', ->
         expect(hubotResponse()).to.eql 'The action somejob is created.'
       it 'records first param properly', ->
@@ -187,7 +187,7 @@ describe 'at_events module', ->
         expect(room.robot.brain.data.at.somejob.eventData.param2).to.eql 'another'
 
     context 'with a valid date and some data with spaces', ->
-      hubot 'at 2016-09-25 run somejob do some.event ' +
+      hubot 'at 2042-09-25 run somejob do some.event ' +
             'with param1=something and whatever param2=another'
       it 'should not complain about the period syntax', ->
         expect(hubotResponse()).to.eql 'The action somejob is created.'
@@ -200,7 +200,7 @@ describe 'at_events module', ->
       beforeEach ->
         room.robot.brain.data.at = {
           somejob: {
-            cronTime: '2016-08-25 08:00',
+            cronTime: '2042-08-25 08:00',
             eventName: 'event2',
             eventData: {
               someparam: 'somevalue'
@@ -216,32 +216,32 @@ describe 'at_events module', ->
         room.robot.at.actions = { }
 
       context 'with simple date update', ->
-        hubot 'at 2016-08-25 20:00 run somejob'
+        hubot 'at 2042-08-25 20:00 run somejob'
         it 'should change the action', ->
           expect(hubotResponse()).to.eql 'The action somejob is updated.'
         it 'should have still have the job in the actions queue', ->
           expect(room.robot.at.actions.somejob).to.be.defined
         it 'change the crontime', ->
-          expect(room.robot.brain.data.at.somejob.cronTime).to.eql '2016-08-25 20:00'
+          expect(room.robot.brain.data.at.somejob.cronTime).to.eql '2042-08-25 20:00'
         it 'change the event name', ->
           expect(room.robot.brain.data.at.somejob.eventName).to.eql 'event2'
 
       context 'with tz update', ->
-        hubot 'at 2016-08-25 20:00 in CEST run somejob'
+        hubot 'at 2042-08-25 20:00 in CEST run somejob'
         it 'should change the action', ->
           expect(hubotResponse()).to.eql 'The action somejob is updated.'
         it 'records timezone properly', ->
           expect(room.robot.brain.data.at.somejob.tz).to.eql 'CEST'
 
       context 'with eventname update', ->
-        hubot 'at 2016-08-25 20:00 run somejob do event3'
+        hubot 'at 2042-08-25 20:00 run somejob do event3'
         it 'should change the action', ->
           expect(hubotResponse()).to.eql 'The action somejob is updated.'
         it 'change the event name', ->
           expect(room.robot.brain.data.at.somejob.eventName).to.eql 'event3'
 
       context 'with data addition', ->
-        hubot 'at 2016-08-25 08:00 run somejob with param1=value1'
+        hubot 'at 2042-08-25 08:00 run somejob with param1=value1'
         it 'should change the action', ->
           expect(hubotResponse()).to.eql 'The action somejob is updated.'
         it 'keeps existing param', ->
@@ -250,11 +250,110 @@ describe 'at_events module', ->
           expect(room.robot.brain.data.at.somejob.eventData.param1).to.eql 'value1'
 
       context 'with data update', ->
-        hubot 'at 2016-08-25 08:00 run somejob with someparam=value1'
+        hubot 'at 2042-08-25 08:00 run somejob with someparam=value1'
         it 'should change the action', ->
           expect(hubotResponse()).to.eql 'The action somejob is updated.'
         it 'updates existing param', ->
           expect(room.robot.brain.data.at.somejob.eventData.someparam).to.eql 'value1'
+
+
+  # ---------------------------------------------------------------------------------
+  context 'user starts an action', ->
+    beforeEach ->
+      room.robot.brain.data.at = {
+        somejob: {
+          cronTime: '2042-08-25 08:00',
+          eventName: 'event1',
+          eventData: { },
+          started: false
+        },
+        another: {
+          cronTime: '2042-08-25 08:00',
+          eventName: 'event2',
+          eventData: { },
+          started: true
+        }
+      }
+      room.robot.brain.emit 'loaded'
+      room.robot.at.loadAll()
+
+    afterEach ->
+      room.robot.brain.data.at = { }
+      room.robot.at.actions = { }
+
+    context 'but action is not known', ->
+      hubot 'at enable nojob'
+      it 'should complain about the nonexistence of that action', ->
+        expect(hubotResponse()).to.eql 'There is no such action named nojob'
+      it 'should not have added an action in the actions queue', ->
+        expect(room.robot.at.actions.nojob).not.to.be.defined
+
+    context 'and action exists', ->
+      hubot 'at enable somejob'
+      it 'should not complain about the period syntax', ->
+        expect(hubotResponse()).to.eql 'The action somejob is now scheduled.'
+      it 'should change brain to record it\'s scheduled', ->
+        expect(room.robot.brain.data.at.somejob.started).to.be.true
+      it 'should have added an action in the actions queue', ->
+        expect(room.robot.at.actions.somejob).to.be.defined
+
+    context 'and action exists and runs', ->
+      hubot 'at enable another'
+      it 'should not complain about the period syntax', ->
+        expect(hubotResponse()).to.eql 'The action another is already scheduled.'
+      it 'should change brain to record it\'s still started', ->
+        expect(room.robot.brain.data.at.another.started).to.be.true
+      it 'should have added a job in the jobs queue', ->
+        expect(room.robot.at.actions.another).to.be.defined
+
+  # ---------------------------------------------------------------------------------
+  context 'user stops a job', ->
+    beforeEach ->
+      room.robot.brain.data.at = {
+        somejob: {
+          cronTime: '2042-08-25 08:00',
+          eventName: 'event1',
+          eventData: { },
+          started: true
+        },
+        another: {
+          cronTime: '2042-08-25 08:00',
+          eventName: 'event2',
+          eventData: { },
+          started: false
+        }
+      }
+      room.robot.brain.emit 'loaded'
+      room.robot.at.loadAll()
+
+    afterEach ->
+      room.robot.brain.data.at = { }
+      room.robot.at.actions = { }
+
+    context 'but action is not known', ->
+      hubot 'at disable nojob'
+      it 'should complain about the nonexistence of that job', ->
+        expect(hubotResponse()).to.eql 'There is no such action named nojob'
+      it 'should not have added a job in the jobs queue', ->
+        expect(room.robot.at.actions.somejob).not.to.be.defined
+
+    context 'and job exists', ->
+      hubot 'at disable somejob'
+      it 'should not complain about the nonexistence of that job', ->
+        expect(hubotResponse()).to.eql 'The action somejob is now unscheduled.'
+      it 'should change brain to record it\'s not started', ->
+        expect(room.robot.brain.data.at.somejob.started).to.be.false
+      it 'should not have added a job in the jobs queue', ->
+        expect(room.robot.at.actions.somejob).to.be.undefined
+
+    context 'and job exists and is not scheduled', ->
+      hubot 'at disable another'
+      it 'should not complain about the nonexistence of that job', ->
+        expect(hubotResponse()).to.eql 'The action another is actually not scheduled.'
+      it 'should change brain to record it\'s not started', ->
+        expect(room.robot.brain.data.at.another.started).to.be.false
+      it 'should not have added a job in the jobs queue', ->
+        expect(room.robot.at.actions.another).to.be.undefined
 
 
   # ---------------------------------------------------------------------------------
@@ -275,7 +374,7 @@ describe 'at_events module', ->
     beforeEach ->
       room.robot.brain.data.at = {
         somejob: {
-          cronTime: '2016-08-25 20:00',
+          cronTime: '2042-08-25 20:00',
           eventName: 'at.message',
           eventData: { room: 'room1', message: 'ha' },
           started: true,

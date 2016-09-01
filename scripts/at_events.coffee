@@ -45,7 +45,7 @@ module.exports = (robot) ->
         unless room?
           room = res.envelope.room ? res.nvelope.reply_to
         options = "room=#{room} message=#{message}"
-        at.addAt null, date, 'at.message', tz, options, (so) ->
+        at.addAction null, date, 'at.message', tz, options, (so) ->
           res.send so.message
         res.finish()
 
@@ -60,9 +60,26 @@ module.exports = (robot) ->
       withPermission res, ->
         # console.log res.match
         [_, date, tz, name, eventName, options] = res.match
-        at.addAt name, date, eventName, tz, options, (so) ->
+        at.addAction name, date, eventName, tz, options, (so) ->
           res.send so.message
         res.finish()
+
+  #   hubot at enable <name>
+  robot.respond /at enable ([^ ]+)$/, (res) ->
+    withPermission res, ->
+      name = res.match[1]
+      at.enableAction name, (so) ->
+        res.send so.message
+      res.finish()
+
+  #   hubot at disable <name>
+  robot.respond /at disable ([^ ]+)$/, (res) ->
+    withPermission res, ->
+      name = res.match[1]
+      at.disableAction name, (so) ->
+        res.send so.message
+      res.finish()
+
 
   # sample for testing purposes
   robot.on 'at.message', (e) ->
