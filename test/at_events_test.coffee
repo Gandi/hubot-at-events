@@ -79,7 +79,48 @@ describe 'at_events module', ->
         expect(hubotResponseCount()).to.eql 1
 
   # ---------------------------------------------------------------------------------
-  context 'user adds a new moment', ->
+  context 'user adds a new message action', ->
+    context 'with a valid date', ->
+      hubot 'at 2016-09-25 08:00 say something to say'
+      it 'should not complain about the date syntax', ->
+        expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
+      it 'records the new action in the brain', ->
+        expect(Object.keys(room.robot.brain.data.at).length).to.eql 1
+      it 'records crontime properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].cronTime).to.eql '2016-09-25 08:00'
+      it 'records eventname properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].eventName).to.eql 'at.message'
+      it 'records room properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].eventData.room).to.eql 'room1'
+      it 'records message properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].eventData.message).to.eql 'something to say'
+
+    context 'when room is specified', ->
+      hubot 'at 2016-09-25 08:00 say in #dev something to say'
+      it 'should not complain about the date syntax', ->
+        expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
+      it 'records the new action in the brain', ->
+        expect(Object.keys(room.robot.brain.data.at).length).to.eql 1
+      it 'records crontime properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].cronTime).to.eql '2016-09-25 08:00'
+      it 'records eventname properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].eventName).to.eql 'at.message'
+      it 'records room properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].eventData.room).to.eql '#dev'
+      it 'records message properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].eventData.message).to.eql 'something to say'
+
+
+  # ---------------------------------------------------------------------------------
+  context 'user adds a new action', ->
 
     context 'with an invalid date', ->
       hubot 'at 2016-09-25 08:80 do some.event'
@@ -154,7 +195,6 @@ describe 'at_events module', ->
         expect(room.robot.brain.data.at.somejob.eventData.param1).to.eql 'something and whatever'
       it 'records second param properly', ->
         expect(room.robot.brain.data.at.somejob.eventData.param2).to.eql 'another'
-
 
     context 'and action already runs', ->
       beforeEach ->

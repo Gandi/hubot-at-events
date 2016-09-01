@@ -37,17 +37,29 @@ module.exports = (robot) ->
   robot.respond new RegExp(
     'at ([-0-9TZW:\.\+ ]+)' +
     '(?: in ([^ ]+))?' +
+    ' say(?: in (#[^ ]+))? (.+) *$'
+    ), (res) ->
+      withPermission res, ->
+        # console.log res.match
+        [_, date, tz, room, message] = res.match
+        unless room?
+          room = res.envelope.room ? res.nvelope.reply_to
+        options = "room=#{room} message=#{message}"
+        at.addAt null, date, 'at.message', tz, options, (so) ->
+          res.send so.message
+        res.finish()
+
+  #   hubot at <date> [run <name>] do <event> [with param1=value1]
+  robot.respond new RegExp(
+    'at ([-0-9TZW:\.\+ ]+)' +
+    '(?: in ([^ ]+))?' +
     '(?: run ([-_a-zA-Z0-9\.]+))?' +
     '(?: do ([-_a-zA-Z0-9\.]+))?' +
     '(?: with ([-_a-zA-Z0-9]+=.+)+)? *$'
     ), (res) ->
       withPermission res, ->
         # console.log res.match
-        date = res.match[1]
-        tz = res.match[2]
-        name = res.match[3]
-        eventName = res.match[4]
-        options = res.match[5]
+        [_, date, tz, name, eventName, options] = res.match
         at.addAt name, date, eventName, tz, options, (so) ->
           res.send so.message
         res.finish()
