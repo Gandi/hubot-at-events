@@ -109,6 +109,16 @@ module.exports = (robot) ->
             res.send "at #{v.cronTime}#{tz} run #{k} do #{v.eventName} #{eventdata}#{status}"
       res.finish()
 
+
+  #   hubot at cancel <name>
+  robot.respond /at cancel ([^ ]+)$/, (res) ->
+    withPermission res, ->
+      name = res.match[1]
+      at.deleteAction name, (so) ->
+        res.send so.message
+      res.finish()
+
+
   # sample for testing purposes
   robot.on 'at.message', (e) ->
     if e.room and e.message

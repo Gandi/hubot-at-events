@@ -87,31 +87,21 @@ class AtEvents
     else
       cb { message: "There is no such action named #{name}" }
 
-  statusAt: (name, cb) ->
-    if @data[name]?
-      if @actions[name]?
-        cb { message: "The job #{name} is currently running." }
-      else
-        cb { message: "The job #{name} is paused." }
-    else
-      cb { message: "statusJob: There is no such job named #{name}" }
-
-  deleteAt: (name, cb) ->
-    if @data[name]?
-      delete @data[name]
-      if @actions[name]?
-        @actions[name].stop()
-        delete @actions[name]
-      cb { message: "The job #{name} is deleted." }
-    else
-      cb { message: "deleteJob: There is no such job named #{name}" }
-
   listActions: (filter, cb) ->
     res = { }
     for k in Object.keys(@data)
       if new RegExp(filter).test k
         res[k] = @data[k]
     cb res
+
+  deleteAction: (name, cb) ->
+    if @data[name]?
+      if @actions[name]?
+        @actions[name].stop()
+      delete @data[name]
+      cb { message: "The action #{name} is cancelled." }
+    else
+      cb { message: "There is no such action named #{name}" }
 
   addData: (name, key, value, cb) ->
     if @data[name]?

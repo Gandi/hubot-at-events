@@ -419,6 +419,39 @@ describe 'at_events module', ->
         expect(hubotResponse(4)).to.be.undefined
 
   # ---------------------------------------------------------------------------------
+  context 'user deletes an action', ->
+    beforeEach ->
+      room.robot.brain.data.at = {
+        somejob: {
+          cronTime: '2042-08-25 08:00',
+          eventName: 'event1',
+          eventData: { },
+          started: true,
+          tz: undefined
+        }
+      }
+      room.robot.brain.emit 'loaded'
+      room.robot.at.loadAll()
+
+    afterEach ->
+      room.robot.brain.data.at = { }
+      room.robot.at.actions = { }
+
+    context 'but action is not known', ->
+      hubot 'at cancel nojob'
+      it 'should complain about the nonexistence of that action', ->
+        expect(hubotResponse()).to.eql 'There is no such action named nojob'
+
+    context 'and action exists', ->
+      hubot 'at cancel somejob'
+      it 'should say that the job is deleted', ->
+        expect(hubotResponse()).to.eql 'The action somejob is cancelled.'
+      it 'should clean the brain of that action', ->
+        expect(room.robot.brain.data.at.somejob).to.be.undefined
+      it 'should clean the actions queue of that action', ->
+        expect(room.robot.at.actions.somejob).to.be.undefined
+
+  # ---------------------------------------------------------------------------------
   context 'events listeners', ->
     it 'should know about at.message', ->
       expect(room.robot.events['at.message']).to.be.defined
