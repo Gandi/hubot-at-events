@@ -55,8 +55,8 @@ class AtEvents
       onTick: =>
         if at.eventName?
           @robot.emit at.eventName, at.eventData
-      onComplete: =>
-        delete @actions[name]
+          delete @actions[name]
+          delete @data[name]
     }
     if at.tz?
       params.tz = at.tz
@@ -64,7 +64,7 @@ class AtEvents
 
   addIn: (name, duration, unit, eventName, options, cb) ->
     if @units[unit]?
-      date = moment().add(duration, unit)
+      date = moment().add(duration, @units[unit])
       @addAction name, date, eventName, null, options, cb
     else
       cb { message: "Sorry, I don't know what #{unit} means." }
@@ -81,8 +81,9 @@ class AtEvents
         if args isnt { }
           for k, v of args
             @data[name].eventData[k] = v
-        if @actions[name]?
-          @_stop name
+        if @data[name].started
+          if @actions[name]?
+            @_stop name
           @_start name
         cb { message: "The action #{name} is updated." }
       else
@@ -95,6 +96,7 @@ class AtEvents
           started: true,
           tz: tz
         }
+        @actions[name] = @loadAction name, @data[name]
         cb { message: "The action #{name} is created." }
     else
       cb { message: "Sorry, '#{date}' is not a valid pattern." }
@@ -126,6 +128,7 @@ class AtEvents
     @withAction name, cb, =>
       if @actions[name]?
         @actions[name].stop()
+        delete @actions[name]
       delete @data[name]
       cb { message: "The action #{name} is cancelled." }
 

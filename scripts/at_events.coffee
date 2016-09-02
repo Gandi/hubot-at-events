@@ -5,8 +5,8 @@
 #   hubot at version
 #   hubot at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
 #   hubot at <date> [in <tz>] [run <name>] say [in <room>] <message>
-#   hubot in <number> <unit> [run <name>] do <event> [with param1=value1]
-#   hubot in <number> <unit> [run <name>] say <room> <message>
+#   hubot in <howmany> <unit> [run <name>] do <event> [with param1=value1]
+#   hubot in <howmany> <unit> [run <name>] say <room> <message>
 #   hubot at enable <name>
 #   hubot at disable <name>
 #   hubot at list <name>
@@ -68,7 +68,7 @@ module.exports = (robot) ->
           res.send so.message
         res.finish()
 
-  #   hubot at <date> [in <tz>] say [in <room>] <some message>
+  #   hubot in <howmany> <unit> say [in <room>] <some message>
   robot.respond new RegExp(
     'in ([0-9]+)' +
     ' *([a-z]+)' +
@@ -84,7 +84,7 @@ module.exports = (robot) ->
           res.send so.message
         res.finish()
 
-  #   hubot at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
+  #   hubot in <howmany> <unit> [run <name>] do <event> [with param1=value1]
   robot.respond new RegExp(
     'in ([0-9]+)' +
     ' *([a-z]+)' +
@@ -143,12 +143,16 @@ module.exports = (robot) ->
       res.finish()
 
   #   hubot at cancel <name>
-  robot.respond /at cancel ([^ ]+)$/, (res) ->
+  robot.respond /at (?:cancel|delete|clean) ([^ ]+)$/, (res) ->
     withPermission res, ->
       name = res.match[1]
       at.deleteAction name, (so) ->
         res.send so.message
       res.finish()
+
+  # debug
+  robot.respond /at actions$/, (res) ->
+    console.log at.actions
 
 
   # sample for testing purposes

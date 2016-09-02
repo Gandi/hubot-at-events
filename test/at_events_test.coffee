@@ -344,7 +344,7 @@ describe 'at_events module', ->
       it 'should change brain to record it\'s not started', ->
         expect(room.robot.brain.data.at.somejob.started).to.be.false
       it 'should not have added a job in the jobs queue', ->
-        expect(room.robot.at.actions.somejob).to.be.undefined
+        expect(room.robot.at.actions.somejob.running).to.be.false
 
     context 'and job exists and is not scheduled', ->
       hubot 'at disable another'
@@ -548,4 +548,4 @@ describe 'at_events module', ->
         it 'should change brain to record it\'s not started', ->
           expect(room.robot.brain.data.at.somejob.started).to.be.false
         it 'should not have added a job in the jobs queue', ->
-          expect(room.robot.at.actions.somejob).to.be.undefined
+          expect(room.robot.at.actions.somejob.running).to.be.false
