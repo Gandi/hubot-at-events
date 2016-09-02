@@ -68,6 +68,37 @@ module.exports = (robot) ->
           res.send so.message
         res.finish()
 
+  #   hubot at <date> [in <tz>] say [in <room>] <some message>
+  robot.respond new RegExp(
+    'in ([0-9]+)' +
+    ' *([a-z]+)' +
+    ' say(?: in (#[^ ]+))? (.+) *$'
+    ), (res) ->
+      withPermission res, ->
+        # console.log res.match
+        [_, duration, unit, room, message] = res.match
+        unless room?
+          room = res.envelope.room ? res.nvelope.reply_to
+        options = "room=#{room} message=#{message}"
+        at.addIn null, duration, unit, 'at.message', options, (so) ->
+          res.send so.message
+        res.finish()
+
+  #   hubot at <date> [in <tz>] [run <name>] do <event> [with param1=value1]
+  robot.respond new RegExp(
+    'in ([0-9]+)' +
+    ' *([a-z]+)' +
+    '(?: run ([-_a-zA-Z0-9\.]+))?' +
+    '(?: do ([-_a-zA-Z0-9\.]+))?' +
+    '(?: with ([-_a-zA-Z0-9]+=.+)+)? *$'
+    ), (res) ->
+      withPermission res, ->
+        # console.log res.match
+        [_, duration, unit, name, eventName, options] = res.match
+        at.addIn name, duration, unit, eventName, options, (so) ->
+          res.send so.message
+        res.finish()
+
   #   hubot at enable <name>
   robot.respond /at enable ([^ ]+) *$/, (res) ->
     withPermission res, ->

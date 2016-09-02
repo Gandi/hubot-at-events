@@ -1,5 +1,5 @@
 # Description:
-#   cron events library
+#   at events library
 #
 # Author:
 #   mose
@@ -8,6 +8,31 @@ CronJob = require('cron').CronJob
 moment = require 'moment'
 
 class AtEvents
+
+  units: {
+    's': 'seconds'
+    'sec': 'seconds'
+    'second': 'seconds'
+    'seconds': 'seconds'
+    'm': 'minutes'
+    'min': 'minutes'
+    'minute': 'minutes'
+    'minutes': 'minutes'
+    'h': 'hours'
+    'hour': 'hours'
+    'hours': 'hours'
+    'd': 'days'
+    'day': 'days'
+    'days': 'days'
+    'w': 'weeks'
+    'week': 'weeks'
+    'weeks': 'weeks'
+    'month': 'months'
+    'months': 'months'
+    'y': 'years'
+    'year': 'years'
+    'years': 'years'
+  }
 
   constructor: (@robot) ->
     storageLoaded = =>
@@ -36,6 +61,13 @@ class AtEvents
     if at.tz?
       params.tz = at.tz
     return new CronJob(params)
+
+  addIn: (name, duration, unit, eventName, options, cb) ->
+    if @units[unit]?
+      date = moment().add(duration, unit)
+      @addAction name, date, eventName, null, options, cb
+    else
+      cb { message: "Sorry, I don't know what #{unit} means." }
 
   addAction: (name, date, eventName, tz, options, cb) ->
     if @_valid date
