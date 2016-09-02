@@ -10,7 +10,7 @@ Hubot At Events Plugin
 
 This plugin is the brother of [hubot-cron-events](https://github.com/Gandi/hubot-cron-events) but specialised in one-time events triggered at a given time.
 
-*Work in progress* - this plugin is not ready for use yet.
+*Work in progress* - this plugin is ready for use but still very experimental.
 
 
 Installation
@@ -58,8 +58,19 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
         - the action will be given a random name.
 
     .in <number> <unit> [run <name>] do <event> [with param1=value1]
-    
+        same as with .at command, but using time relative to now
+        acceptable units are
+        - s, sec, second, seconds
+        - m, min, minute, minutes
+        - h, hour, hours
+        - d, day, days
+        - w, week, weeks
+        - month, months
+        - y, year, years
+        For the rest, it behaves exactly like the .at command
+
     .in <number> <unit> [run <name>] say <room> <message>
+        same as the equivalent '.at <date> say' command
 
     .at enable <name>
         activate an action that was previously disabled
@@ -73,8 +84,6 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
 
     .at cancel <name>
         removes the action, all data about it will be lost
-
-    .at when <name>
 
     .at <name> with <key> = <value>
 
