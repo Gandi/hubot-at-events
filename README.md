@@ -6,8 +6,6 @@ Hubot At Events Plugin
 [![Build Status](https://img.shields.io/travis/Gandi/hubot-at-events.svg)](https://travis-ci.org/Gandi/hubot-at-events)
 [![Dependency Status](https://gemnasium.com/Gandi/hubot-at-events.svg)](https://gemnasium.com/Gandi/hubot-at-events)
 [![Coverage Status](https://img.shields.io/codeclimate/coverage/github/Gandi/hubot-at-events.svg)](https://codeclimate.com/github/Gandi/hubot-at-events/coverage)
-[![Code Climate](https://img.shields.io/codeclimate/github/Gandi/hubot-at-events.svg)](https://codeclimate.com/github/Gandi/hubot-at-events)
-
 [![NPM](https://nodei.co/npm/hubot-at-events.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/hubot-at-events/)
 
 This plugin is the brother of [hubot-cron-events](https://github.com/Gandi/hubot-cron-events) but specialised in one-time events triggered at a given time.
