@@ -1,7 +1,7 @@
 {
   "name": "hubot-at-events",
   "description": "A hubot plugin to perform events emission at given time.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "mose",
     "email": "mose@gandi.net",
@@ -14,10 +14,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/Gandi/hubot-cron-events.git"
+    "url": "git://github.com/Gandi/hubot-at-events.git"
   },
   "bugs": {
-    "url": "https://github.com/Gandi/hubot-cron-events/issues"
+    "url": "https://github.com/Gandi/hubot-at-events/issues"
   },
   "dependencies": {
     "cron": "^1.1.0",

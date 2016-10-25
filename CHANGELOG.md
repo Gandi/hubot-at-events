@@ -1,6 +1,9 @@
 Hubot-at-events Changelog
 ==========================
 
+### 0.1.2 - 2016-10-26
+- fix links in packages.json
+
 ### 0.1.1 - 2016-09-02
 - add .in commands
 - fix action enable at creation
