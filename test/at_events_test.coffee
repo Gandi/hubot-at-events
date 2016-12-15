@@ -12,6 +12,7 @@ helper = new Helper('../scripts/at_events.coffee')
 
 path   = require 'path'
 sinon  = require 'sinon'
+moment = require 'moment'
 expect = require('chai').use(require('sinon-chai')).expect
 
 room = null
@@ -130,6 +131,22 @@ describe 'at_events module', ->
         expect(room.robot.logger.error).calledOnce
       it 'should log an error talking about date format', ->
         expect(room.robot.logger.error).calledWith 'Invalid date 2042-09-25 08:80'
+
+    context 'with a valid delay', ->
+      before ->
+        now = moment()
+        @nowplus5min = moment(now.add(5, 'minutes')).format('YYYY-MM-DD HH:mm')
+      hubot 'in 5 min do some.event'
+      it 'should not complain about the date syntax', ->
+        expect(hubotResponse()).to.match /The action [a-z0-9]+ is created\./
+      it 'records the new action in the brain', ->
+        expect(Object.keys(room.robot.brain.data.at).length).to.eql 1
+      it 'records crontime properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].cronTime).to.eql @nowplus5min
+      it 'records eventname properly', ->
+        name = Object.keys(room.robot.brain.data.at)[0]
+        expect(room.robot.brain.data.at[name].eventName).to.eql 'some.event'
 
     context 'with a valid date', ->
       hubot 'at 2042-09-25 08:00 do some.event'

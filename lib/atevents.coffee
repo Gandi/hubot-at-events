@@ -64,7 +64,7 @@ class AtEvents
 
   addIn: (name, duration, unit, eventName, options, cb) ->
     if @units[unit]?
-      date = moment().add(duration, @units[unit])
+      date = moment().add(duration, @units[unit]).format('YYYY-MM-DD HH:mm')
       @addAction name, date, eventName, null, options, cb
     else
       cb { message: "Sorry, I don't know what #{unit} means." }
