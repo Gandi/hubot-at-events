@@ -27,7 +27,10 @@ Configuration
 
 If you use [hubot-auth](https://github.com/hubot-scripts/hubot-auth), the plugin configuration commands will be restricted to user with the `admin` role. 
 
-But if hubot-auth is not loaded, all users can access those commands.
+If hubot-auth is not loaded, all users can access those commands. You can use those variables to tune things up a bit.
+
+- `HUBOT_AT_NOAUTH` - if defined, it will bypass the need to be admin to use the `.at` commands
+- `HUBOT_AT_AUTH_GROUP` - if defined it will permit group specified to use the `.at` commands
 
 It's also advised to use a brain persistence plugin, whatever it is, to persist the cron jobs between restarts.
 

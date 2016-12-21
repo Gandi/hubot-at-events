@@ -25,11 +25,21 @@ module.exports = (robot) ->
 
   withPermission = (res, cb) ->
     user = robot.brain.userForName(res.envelope.user.name) or res.envelope.user
-    if robot.auth? and not robot.auth?.isAdmin(user)
-      res.reply "You don't have permission to do that."
-      res.finish()
-    else
+    if not robot.auth?
       cb()
+    else
+      if robot.auth?.isAdmin(user)
+        cb()
+      else
+        if process.env.HUBOT_AT_NOAUTH? and process.env.HUBOT_AT_NOAUTH isnt 'false'
+          cb()
+        else
+          if process.env.HUBOT_AT_AUTH_GROUP? and
+             robot.auth.hasRole(user, process.env.HUBOT_AT_AUTH_GROUP)
+            cb()
+          else
+            res.reply "You don't have permission to do that."
+            res.finish()
 
   #   hubot at version
   robot.respond /at version$/, (res) ->
@@ -151,9 +161,8 @@ module.exports = (robot) ->
       res.finish()
 
   # debug
-  robot.respond /at actions$/, (res) ->
-    console.log at.actions
-
+  # robot.respond /at actions$/, (res) ->
+  #   console.log at.actions
 
   # sample for testing purposes
   robot.on 'at.message', (e) ->
