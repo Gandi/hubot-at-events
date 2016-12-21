@@ -31,7 +31,8 @@ module.exports = (robot) ->
       if robot.auth?.isAdmin(user)
         cb()
       else
-        if process.env.HUBOT_AT_NOAUTH? and process.env.HUBOT_AT_NOAUTH isnt 'false'
+        if process.env.HUBOT_AT_NOAUTH? and
+           process.env.HUBOT_AT_NOAUTH isnt 'false'
           cb()
         else
           if process.env.HUBOT_AT_AUTH_GROUP? and
