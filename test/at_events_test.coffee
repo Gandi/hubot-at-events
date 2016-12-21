@@ -531,6 +531,10 @@ describe 'at_events module', ->
       room.robot.brain.userForId 'user', {
         name: 'user'
       }
+      room.robot.brain.userForId 'user_in_group', {
+        name: 'user_in_group',
+        roles: [ 'ingroup' ]
+      }
 
     context 'user wants to disable an action', ->
       beforeEach ->
@@ -560,6 +564,80 @@ describe 'at_events module', ->
 
       context 'and user is admin', ->
         hubot 'at disable somejob', 'admin_user'
+        it 'should comply and disable the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is now unscheduled.'
+        it 'should change brain to record it\'s not started', ->
+          expect(room.robot.brain.data.at.somejob.started).to.be.false
+        it 'should not have added a job in the jobs queue', ->
+          expect(room.robot.at.actions.somejob.running).to.be.false
+
+    context 'the NOAUTH var is set and user wants to disable an action', ->
+      beforeEach ->
+        process.env.HUBOT_AT_NOAUTH = 'true'
+        room.robot.brain.data.at = {
+          somejob: {
+            cronTime: '2042-08-25 20:00',
+            eventName: 'event1',
+            eventData: { },
+            started: true
+          }
+        }
+        room.robot.brain.emit 'loaded'
+        room.robot.at.loadAll()
+
+      afterEach ->
+        delete process.env.HUBOT_AT_NOAUTH
+        room.robot.brain.data.at = { }
+        room.robot.at.actions = { }
+
+      context 'and user is not admin', ->
+        hubot 'at disable somejob', 'user'
+        it 'should comply and disable the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is now unscheduled.'
+        it 'should change brain to record it\'s not started', ->
+          expect(room.robot.brain.data.at.somejob.started).to.be.false
+        it 'should not have added a job in the jobs queue', ->
+          expect(room.robot.at.actions.somejob.running).to.be.false
+
+    context 'the AUTH_GROUP var is set and user wants to disable an action', ->
+      beforeEach ->
+        process.env.HUBOT_AT_AUTH_GROUP = 'ingroup'
+        room.robot.brain.data.at = {
+          somejob: {
+            cronTime: '2042-08-25 20:00',
+            eventName: 'event1',
+            eventData: { },
+            started: true
+          }
+        }
+        room.robot.brain.emit 'loaded'
+        room.robot.at.loadAll()
+
+      afterEach ->
+        delete process.env.HUBOT_AT_NOAUTH
+        room.robot.brain.data.at = { }
+        room.robot.at.actions = { }
+
+      context 'and user is not in the group', ->
+        hubot 'at disable somejob', 'user'
+        it 'should deny permission to the user', ->
+          expect(hubotResponse()).to.eql "@user You don't have permission to do that."
+        it 'should keep the brain with the started status', ->
+          expect(room.robot.brain.data.at.somejob.started).to.be.true
+        it 'should not have added a job in the jobs queue', ->
+          expect(room.robot.at.actions.somejob).to.be.defined
+
+      context 'and user is admin', ->
+        hubot 'at disable somejob', 'admin_user'
+        it 'should comply and disable the action', ->
+          expect(hubotResponse()).to.eql 'The action somejob is now unscheduled.'
+        it 'should change brain to record it\'s not started', ->
+          expect(room.robot.brain.data.at.somejob.started).to.be.false
+        it 'should not have added a job in the jobs queue', ->
+          expect(room.robot.at.actions.somejob.running).to.be.false
+
+      context 'and user is in the group', ->
+        hubot 'at disable somejob', 'user_in_group'
         it 'should comply and disable the action', ->
           expect(hubotResponse()).to.eql 'The action somejob is now unscheduled.'
         it 'should change brain to record it\'s not started', ->
