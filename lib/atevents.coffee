@@ -67,7 +67,7 @@ class AtEvents
       date = moment().add(duration, @units[unit]).format('YYYY-MM-DD HH:mm')
       @addAction name, date, eventName, null, options, cb
     else
-      cb { message: "Sorry, I don't know what #{unit} means." }
+      cb { message: "Sorry, I don't know what '#{unit}' means." }
 
   addAction: (name, date, eventName, tz, options, cb) ->
     if @_valid date

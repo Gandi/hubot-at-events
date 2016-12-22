@@ -387,7 +387,8 @@ describe 'at_events module', ->
           cronTime: '2042-08-25 08:00',
           eventName: 'event1',
           eventData: {
-            param1: 'value1'
+            param1: 'value1',
+            from: 'toto'
           },
           started: true,
           tz: undefined
@@ -423,7 +424,7 @@ describe 'at_events module', ->
       it 'should show the matching actions', ->
         expect(hubotResponse()).to.eql 'at 2042-08-25 08:00 run somejob do event1 (disabled)'
         expect(hubotResponse(2)).
-          to.eql 'at 2042-08-25 08:00 run someotherjob do event1 with param1=value1 '
+          to.eql 'at 2042-08-25 08:00 run someotherjob do event1 with param1=value1 from=toto '
         expect(hubotResponse(3)).to.be.undefined
 
     context 'and it gets all jobs', ->
@@ -431,7 +432,7 @@ describe 'at_events module', ->
       it 'should show the whole list of actions', ->
         expect(hubotResponse()).to.eql 'at 2042-08-25 08:00 run somejob do event1 (disabled)'
         expect(hubotResponse(2)).
-          to.eql 'at 2042-08-25 08:00 run someotherjob do event1 with param1=value1 '
+          to.eql 'at 2042-08-25 08:00 run someotherjob do event1 with param1=value1 from=toto '
         expect(hubotResponse(3)).to.eql 'at 2042-08-25 08:00 in UTC run anotherjob do event1 '
         expect(hubotResponse(4)).to.be.undefined
 
@@ -489,11 +490,11 @@ describe 'at_events module', ->
 
     context 'for at.message', ->
       beforeEach (done) ->
-        room.robot.emit 'at.message', { room: 'room1', message: 'ha' }
+        room.robot.emit 'at.message', { room: 'room1', message: 'ha', from: 'toto' }
         setTimeout (done), 50
 
       it 'should say that param is added to data', ->
-        expect(hubotResponse(0)).to.eql 'ha'
+        expect(hubotResponse(0)).to.eql 'ha (toto)'
 
   # ---------------------------------------------------------------------------------
   context 'events triggers', ->
@@ -502,7 +503,7 @@ describe 'at_events module', ->
         somejob: {
           cronTime: '2042-08-25 20:00',
           eventName: 'at.message',
-          eventData: { room: 'room1', message: 'ha' },
+          eventData: { room: 'room1', message: 'ha', from: 'toto' },
           started: true,
           tz: undefined
         }
@@ -518,7 +519,7 @@ describe 'at_events module', ->
       beforeEach ->
         room.robot.at.actions.somejob.fireOnTick()
       it 'should say something', ->
-        expect(hubotResponse(0)).to.eql 'ha'
+        expect(hubotResponse(0)).to.eql 'ha (toto)'
 
   # ---------------------------------------------------------------------------------
   context 'permissions system', ->

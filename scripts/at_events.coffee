@@ -58,8 +58,8 @@ module.exports = (robot) ->
         # console.log res.match
         [_, date, tz, room, message] = res.match
         unless room?
-          room = res.envelope.room ? res.nvelope.reply_to
-        options = "room=#{room} message=#{message}"
+          room = res.envelope.room ? res.envelope.reply_to
+        options = "room=#{room} message=#{message} from=#{res.envelope.user.name}"
         at.addAction null, date, 'at.message', tz, options, (so) ->
           res.send so.message
         res.finish()
@@ -75,6 +75,8 @@ module.exports = (robot) ->
       withPermission res, ->
         # console.log res.match
         [_, date, tz, name, eventName, options] = res.match
+        options ?= ''
+        options += " from=#{res.envelope.user.name}"
         at.addAction name, date, eventName, tz, options, (so) ->
           res.send so.message
         res.finish()
@@ -89,8 +91,8 @@ module.exports = (robot) ->
         # console.log res.match
         [_, duration, unit, room, message] = res.match
         unless room?
-          room = res.envelope.room ? res.nvelope.reply_to
-        options = "room=#{room} message=#{message}"
+          room = res.envelope.room ? res.envelope.reply_to
+        options = "room=#{room} message=#{message} from=#{res.envelope.user.name}"
         at.addIn null, duration, unit, 'at.message', options, (so) ->
           res.send so.message
         res.finish()
@@ -106,6 +108,8 @@ module.exports = (robot) ->
       withPermission res, ->
         # console.log res.match
         [_, duration, unit, name, eventName, options] = res.match
+        options ?= ''
+        options += " from=#{res.envelope.user.name}"
         at.addIn name, duration, unit, eventName, options, (so) ->
           res.send so.message
         res.finish()
@@ -165,7 +169,8 @@ module.exports = (robot) ->
   # robot.respond /at actions$/, (res) ->
   #   console.log at.actions
 
-  # sample for testing purposes
   robot.on 'at.message', (e) ->
     if e.room and e.message
+      if e.from
+        e.message += " (#{e.from})"
       robot.messageRoom e.room, e.message
