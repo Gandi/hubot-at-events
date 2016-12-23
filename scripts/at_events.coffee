@@ -52,13 +52,13 @@ module.exports = (robot) ->
   robot.respond new RegExp(
     'at ([-0-9TZW:\.\+ ]+)' +
     '(?: in ([^ ]+))?' +
-    ' say(?: in (#[^ ]+))? (.+) *$'
+    ' say(?: in (#[^ ]+)| to ([^ ]+))? (.+) *$'
     ), (res) ->
       withPermission res, ->
         # console.log res.match
-        [_, date, tz, room, message] = res.match
+        [_, date, tz, room, who, message] = res.match
         unless room?
-          room = res.envelope.room ? res.envelope.reply_to
+          room = who ? res.envelope.room ? res.envelope.reply_to
         options = "room=#{room} message=#{message} from=#{res.envelope.user.name}"
         at.addAction null, date, 'at.message', tz, options, (so) ->
           res.send so.message
@@ -85,13 +85,13 @@ module.exports = (robot) ->
   robot.respond new RegExp(
     'in ([0-9]+)' +
     ' *([a-z]+)' +
-    ' say(?: in (#[^ ]+))? (.+) *$'
+    ' say(?: in (#[^ ]+)| to ([^ ]+))? (.+) *$'
     ), (res) ->
       withPermission res, ->
         # console.log res.match
-        [_, duration, unit, room, message] = res.match
+        [_, duration, unit, room, who, message] = res.match
         unless room?
-          room = res.envelope.room ? res.envelope.reply_to
+          room = who ? res.envelope.room ? res.envelope.reply_to
         options = "room=#{room} message=#{message} from=#{res.envelope.user.name}"
         at.addIn null, duration, unit, 'at.message', options, (so) ->
           res.send so.message

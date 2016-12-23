@@ -54,11 +54,14 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
           as it's needed for later cancellation or modification
         - if no <tz> is provided, the server tz will be applied
 
-    .at <date> [in <tz>] [run <name>] say [in <room>] <message>
-        same as above, except that the aevent will be 'at.message'
+    .at <date> [in <tz>] [run <name>] say [in #<room>] <message>
+        same as above, except that the event will be 'at.message'
         - if the <room> is omitted, it will be set to the room 
           where the command is done
         - the action will be given a random name.
+
+    .at <date> [in <tz>] [run <name>] say [to <username>] <message>
+        same as above, except that the message will be said to the <username> in private
 
     .in <number> <unit> [run <name>] do <event> [with param1=value1]
         same as with .at command, but using time relative to now
@@ -72,8 +75,10 @@ Commands prefixed by `.at` or `.in` are here taking in account we use the `.` as
         - y, year, years
         For the rest, it behaves exactly like the .at command
 
-    .in <number> <unit> [run <name>] say <room> <message>
-        same as the equivalent '.at <date> say' command
+    .in <number> <unit> [run <name>] say [in #<room>] <message>
+        same as above, except that the message will be said to the <username> in private
+
+    .in <number> <unit> [run <name>] say [to <username>] <message>
 
     .at enable <name>
         activate an action that was previously disabled

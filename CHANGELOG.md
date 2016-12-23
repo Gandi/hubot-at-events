@@ -1,6 +1,9 @@
 Hubot-at-events Changelog
 ==========================
 
+### 0.1.5 - 2016-12-23
+- make possible to use a username as target with `.in x say to <user> something`
+
 ### 0.1.4 - 2016-12-22
 - fix detection of the room if not provided
 - a 'from' eventData param is added, and displayed when using the 'say' command
