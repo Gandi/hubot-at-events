@@ -1,12 +1,17 @@
 {
   "name": "hubot-at-events",
   "description": "A hubot plugin to perform events emission at given time.",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": {
     "name": "mose",
     "email": "mose@gandi.net",
     "url": "https://github.com/mose"
   },
+  "contributors": [{
+    "name": "kolo",
+    "email": "kolo@kolo.fr",
+    "url": "https://github.com/baptistem"
+  }],
   "license": "MIT",
   "keywords": [
     "hubot",
