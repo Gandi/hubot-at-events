@@ -51,6 +51,13 @@ describe 'at_events module', ->
           eventData: { },
           started: true,
           tz: 'UTC'
+        },
+        tooold: {
+          cronTime: '1900-08-25 08:00',
+          eventName: 'event3',
+          eventData: { },
+          started: true,
+          tz: 'UTC'
         }
       }
       room.robot.brain.emit 'loaded'
