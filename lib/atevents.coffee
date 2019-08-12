@@ -47,7 +47,7 @@ class AtEvents
     for name, at of @data
       if at.started
         if moment(at.cronTime).isBefore(moment())
-          @robot.logger.warn "ignoring #{name}, date is in the past"
+          @robot.logger.debug "ignoring #{name}, date is in the past"
         else
           @actions[name] = @loadAction name, at
 
